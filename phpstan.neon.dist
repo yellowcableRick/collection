@@ -1,0 +1,8 @@
+parameters:
+	level: 8
+	paths:
+		- src
+		- tests
+	excludePaths:
+	    - src/Elastic/Elastic8Trait.php
+	    - src/Elastic/PromiseHandler.php

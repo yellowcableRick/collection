@@ -1,0 +1,37 @@
+{
+  "name": "yellowcable/collection",
+  "description": "Collection and Aggregation.",
+  "homepage": "https://yellowcable.nl",
+  "version": "1.0.0",
+  "type": "library",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Rick Pennings",
+      "email": "info@yellowcable.nl"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "ext-json": "*",
+    "ext-zlib": "*",
+    "laravel/serializable-closure": "^v1.3.1"
+  },
+
+  "require-dev": {
+    "phpunit/phpunit": "^10.2.6",
+    "squizlabs/php_codesniffer": "^3.7.2",
+    "phpstan/phpstan": "^1.10.26",
+    "phpmd/phpmd": "^2.13.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "YellowCable\\Collection\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "YellowCable\\Collection\\Tests\\": "tests/"
+    }
+  }
+}
