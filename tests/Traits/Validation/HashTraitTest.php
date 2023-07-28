@@ -23,7 +23,8 @@ class HashTraitTest extends Test
         };
 
         $this->assertTrue($collection->verifyHash($collection->getHash()));
-        $collection[] = new class(){};
+        $collection[] = new class () {
+        };
         $this->assertFalse($collection->verifyHash());
         $this->assertTrue($collection->verifyHash());
     }

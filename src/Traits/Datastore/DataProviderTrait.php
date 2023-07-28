@@ -112,7 +112,6 @@ trait DataProviderTrait
     {
         if ($this instanceof Collection) {
             $changes = 0;
-            //TODO: Reduce complexity
             if (method_exists($this, "getPrimaryKey") && $primaryKey = $this->getPrimaryKey()) {
                 foreach ($this->updateProvider->getClosure()(...$args) as $item) {
                     if (method_exists($item, "get" . ucfirst($primaryKey))) {

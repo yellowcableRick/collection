@@ -6,7 +6,6 @@ use YellowCable\Collection\Aggregation;
 
 class FullTraitedItemAggregation extends Aggregation
 {
-
     /**
      * @inheritDoc
      */
