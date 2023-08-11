@@ -1,0 +1,2 @@
+- Allow multiple classes in CollectionInterface::getClass();
+- Create a findByPrimaryKey method for PrimaryKeyTrait.
