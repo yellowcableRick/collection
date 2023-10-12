@@ -1,25 +1,16 @@
 <?php
 
-namespace YellowCable\Collection;
+namespace YellowCable\Collection\Traits;
 
 use YellowCable\Collection\Exceptions\DuplicateItemException;
+use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
+use YellowCable\Collection\Interfaces\AggregationInterface;
+use YellowCable\Collection\Interfaces\CollectionInterface;
 
 trait AggregationTrait
 {
-    /**
-     * Constructor for Aggregation. Any and all Aggregation constructed will
-     * be directly stored in the static property.
-     *
-     * @param string $identifier
-     */
-    public function __construct(string $identifier = "")
-    {
-        parent::__construct($identifier);
-        static::set($this);
-    }
-
     /**
      * Add a collection to this Aggregation. If you choose to prevent duplications in
      * the aggregated Collections, it will compare the new primary keys with the
@@ -28,18 +19,19 @@ trait AggregationTrait
      * between the collected Items.
      *
      * @param CollectionInterface $collection
-     * @param bool $preventDuplicates
+     * @param bool                $preventDuplicates
      * @return AggregationInterface
      * @throws DuplicateItemException
      * @throws NotImplementedException
      * @throws ValidationException
+     * @throws EmptyException
      */
     public function addCollection(
         CollectionInterface $collection,
         bool $preventDuplicates = true
     ): AggregationInterface {
         if ($collection->count() === 0) {
-            return $this;
+            throw new EmptyException();
         }
 
         if ($preventDuplicates) {

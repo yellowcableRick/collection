@@ -19,13 +19,13 @@ trait MaxTrait
      * @param string $s Either method name or property name of the items in this object.
      * @return int|float
      */
-    public function getMax(string $s): int|float
+    public function getMax(string $z): int|float
     {
-        $gt = fn($x, $y) => ($x > $y) ? $x : $y;
-        $v = null;
+        $calc = fn($x, $y) => ($x > $y) ? $x : $y;
+        $y = null;
         foreach ($this as $i) {
-            $v = $gt((method_exists($i, $s)) ? $i->$s() : $i->$s, $v);
+            $y = $calc((method_exists($i, $z)) ? $i->$z() : $i->$z, $y);
         }
-        return $v;
+        return $y;
     }
 }

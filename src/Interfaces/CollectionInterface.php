@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection;
+namespace YellowCable\Collection\Interfaces;
 
 use ArrayAccess;
 use Countable;
@@ -8,6 +8,11 @@ use Iterator;
 use JsonSerializable;
 use SeekableIterator;
 
+/**
+ * @extends ArrayAccess<int, object>
+ * @extends Iterator<int, object>
+ * @extends SeekableIterator<int, object>
+ */
 interface CollectionInterface extends
     ArrayAccess,
     Iterator,

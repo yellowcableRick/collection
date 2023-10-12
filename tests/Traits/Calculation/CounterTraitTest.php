@@ -2,12 +2,12 @@
 
 namespace YellowCable\Collection\Tests\Traits\Calculation;
 
-use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Traits\Calculation\CounterTrait;
+use YellowCable\Collection\Tests\Test;
+use YellowCable\Collection\Traits\Calculation\Counter\CounterTrait;
 
-class CounterTraitTest extends TestCase
+class CounterTraitTest extends Test
 {
     public function test(): void
     {

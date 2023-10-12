@@ -2,10 +2,10 @@
 
 namespace YellowCable\Collection\Tests\Traits\Datastore;
 
-use YellowCable\Collection\CollectionInterface;
-use YellowCable\Collection\CollectionTrait;
+use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
+use YellowCable\Collection\Traits\CollectionTrait;
 use YellowCable\Collection\Traits\Datastore\PrimaryKeysTrait;
 
 class PrimaryKeysTraitTest extends Test

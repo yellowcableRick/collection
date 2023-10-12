@@ -2,6 +2,9 @@
 
 namespace YellowCable\Collection;
 
+use YellowCable\Collection\Interfaces\CollectionInterface;
+use YellowCable\Collection\Traits\CollectionTrait;
+
 /**
  * Collection gives a flexible object in which you can create collections
  * of items, in the form of anything you would like to collect. Assuming any

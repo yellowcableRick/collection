@@ -2,11 +2,10 @@
 
 namespace YellowCable\Collection;
 
-use YellowCable\Collection\Exceptions\{DoesNotExistException,
-    DuplicateItemException,
-    NotImplementedException,
-    ValidationException};
-use Exception;
+use YellowCable\Collection\Interfaces\AggregationInterface;
+use YellowCable\Collection\Interfaces\AggregationStaticInterface;
+use YellowCable\Collection\Traits\AggregationStaticTrait;
+use YellowCable\Collection\Traits\AggregationTrait;
 
 /**
  * Aggregation is used to aggregate items using Collections as containers,
@@ -19,8 +18,20 @@ use Exception;
  * same identifier it should be compatible with one-another. Make sure you separate
  * your aggregations by setting the correct identifiers in the Collections.
  */
-abstract class Aggregation extends Collection implements AggregationInterface
+abstract class Aggregation extends Collection implements AggregationInterface, AggregationStaticInterface
 {
     use AggregationStaticTrait;
     use AggregationTrait;
+
+    /**
+     * Constructor for Aggregation. Any and all Aggregation constructed will
+     * be directly stored in the static property.
+     *
+     * @param string $identifier
+     */
+    public function __construct(string $identifier = "")
+    {
+        parent::__construct($identifier);
+        static::set($this);
+    }
 }

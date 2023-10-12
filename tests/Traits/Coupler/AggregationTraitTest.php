@@ -6,10 +6,11 @@ use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Test;
 use YellowCable\Collection\Traits\Coupler\AggregationTrait;
 use YellowCable\Collection\Traits\Datastore\PrimaryKeysTrait;
 
-class AggregationTraitTest extends TestCase
+class AggregationTraitTest extends Test
 {
     public function test(): void
     {
@@ -37,8 +38,5 @@ class AggregationTraitTest extends TestCase
             $collection->getEncapsulation()->getIdentifier(),
             $collection->getAggregation()->getItem(fn($x) => $x->getIdentifier() === "test")->getIdentifier()
         );
-
-        $this->expectException(NotImplementedException::class);
-        $collection->disaggregate();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace YellowCable\Collection\Traits\Generic;
 
+use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 
 trait MagicMethodsTrait
@@ -31,6 +32,22 @@ trait MagicMethodsTrait
         }
 
         return $output;
+    }
+
+    /**
+     * @throws DoesNotExistException
+     */
+    public function __get(string $name)
+    {
+        throw new DoesNotExistException("Property does not exist on this collection.");
+    }
+
+    /**
+     * @throws DoesNotExistException
+     */
+    public function __set(string $name, $value): void
+    {
+        throw new DoesNotExistException("Property does not exist on this collection.");
     }
 
     /**

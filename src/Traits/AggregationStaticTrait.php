@@ -1,9 +1,13 @@
 <?php
 
-namespace YellowCable\Collection;
+namespace YellowCable\Collection\Traits;
 
+use YellowCable\Collection\Aggregation;
+use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
+use YellowCable\Collection\Interfaces\AggregationInterface;
+use YellowCable\Collection\Interfaces\CollectionInterface;
 
 trait AggregationStaticTrait
 {
@@ -54,18 +58,6 @@ trait AggregationStaticTrait
             });
         }
         return self::get($collection->getIdentifier())->addCollection($collection, $preventDuplicates);
-    }
-
-    /**
-     * Disaggregate a Collection.
-     *
-     * @param Collection $collection
-     * @return AggregationInterface
-     * @throws NotImplementedException
-     */
-    public static function disaggregate(CollectionInterface $collection): AggregationInterface
-    {
-        throw new NotImplementedException("Method not (yet) implemented.");
     }
 
     /**

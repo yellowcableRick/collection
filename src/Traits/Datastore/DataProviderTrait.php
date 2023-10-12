@@ -6,7 +6,6 @@ use DateTime;
 use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
-use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Exceptions\UnequalCountException;
 
@@ -21,8 +20,6 @@ trait DataProviderTrait
     private UnsignedSerializableClosure $updateProvider;
     /** @var UnsignedSerializableClosure $countProvider Method to provide a count on the original data source */
     private UnsignedSerializableClosure $countProvider;
-    /** @var UnsignedSerializableClosure $primaryKeyValuesProvider Method to provide the primary keys of the original data source */
-    private UnsignedSerializableClosure $primaryKeyValuesProvider;
     /** @var ?DateTime $lastUpdated DateTime when the last time the updateProvider ran */
     private ?DateTime $lastUpdated = null;
 
@@ -62,18 +59,13 @@ trait DataProviderTrait
      * @param mixed ...$args
      *
      * @return DataProviderTrait
-     * @throws FailedInheritanceException
      * @throws PhpVersionNotSupportedException
      */
     public function runDataProvider(mixed ...$args): static
     {
-        if ($this instanceof Collection) {
             $this->setCollection($this->dataProvider->getClosure()(...$args), false);
             $this->lastUpdated = new DateTime();
             return $this;
-        } else {
-            throw new FailedInheritanceException("DataProviderTrait used on something other than a Collection");
-        }
     }
 
     /**
@@ -110,35 +102,31 @@ trait DataProviderTrait
      */
     public function runUpdateProvider(mixed ...$args): static
     {
-        if ($this instanceof Collection) {
-            $changes = 0;
-            if (method_exists($this, "getPrimaryKey") && $primaryKey = $this->getPrimaryKey()) {
-                foreach ($this->updateProvider->getClosure()(...$args) as $item) {
-                    if (method_exists($item, "get" . ucfirst($primaryKey))) {
-                        $getter = "get" . ucfirst($primaryKey);
-                        $reference = $item->$getter();
-                        $this->offsetSet($this->getKey(fn($x) => $x->$getter() === $reference), $item);
-                        $changes++;
-                    } elseif (property_exists($item, $primaryKey)) {
-                        $reference = $item->$$primaryKey;
-                        $this->offsetSet($this->getKey(fn($x) => $x->$$primaryKey === $reference), $item);
-                        $changes++;
-                    }
-                }
-            } else {
-                foreach ($this->updateProvider->getClosure()(...$args) as $item) {
-                    $this->offsetSet(null, $item);
+        $changes = 0;
+        if (method_exists($this, "getPrimaryKey") && $primaryKey = $this->getPrimaryKey()) {
+            foreach ($this->updateProvider->getClosure()(...$args) as $item) {
+                if (method_exists($item, "get" . ucfirst($primaryKey))) {
+                    $getter = "get" . ucfirst($primaryKey);
+                    $reference = $item->$getter();
+                    $this->offsetSet($this->getKey(fn($x) => $x->$getter() === $reference), $item);
+                    $changes++;
+                } elseif (property_exists($item, $primaryKey)) {
+                    $reference = $item->$$primaryKey;
+                    $this->offsetSet($this->getKey(fn($x) => $x->$$primaryKey === $reference), $item);
                     $changes++;
                 }
             }
-            if ($changes && isset($this->fixedCount)) {
-                $this->fixedCount += $changes;
-            }
-            $this->lastUpdated = new DateTime();
-            return $this;
         } else {
-            throw new FailedInheritanceException("DataProviderTrait used on something other than a Collection");
+            foreach ($this->updateProvider->getClosure()(...$args) as $item) {
+                $this->offsetSet(null, $item);
+                $changes++;
+            }
         }
+        if ($changes && isset($this->fixedCount)) {
+            $this->fixedCount += $changes;
+        }
+        $this->lastUpdated = new DateTime();
+        return $this;
     }
 
     /**
@@ -162,19 +150,14 @@ trait DataProviderTrait
      *
      * @throws UnequalCountException
      * @throws PhpVersionNotSupportedException
-     * @throws FailedInheritanceException
      */
     public function runCountProvider(mixed ...$args): static
     {
-        if ($this instanceof Collection) {
-            $sourceCount = $this->updateProvider->getClosure()(...$args);
-            if ($sourceCount !== $this->count()) {
-                throw new UnequalCountException("Source: $sourceCount. Collection: {$this->count()}");
-            }
-            return $this;
-        } else {
-            throw new FailedInheritanceException("DataProviderTrait used on something other than a Collection");
+        $sourceCount = $this->updateProvider->getClosure()(...$args);
+        if ($sourceCount !== $this->count()) {
+            throw new UnequalCountException("Source: $sourceCount. Collection: {$this->count()}");
         }
+        return $this;
     }
 
     /**

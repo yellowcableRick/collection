@@ -8,7 +8,7 @@ use YellowCable\Collection\Tests\Test;
 
 class ArrayAccessTraitTest extends Test
 {
-    public function testArrayAccess()
+    public function testArrayAccess(): void
     {
         $item1 = new Item("item1", 0, 1.00);
         $item2 = new Item("item2", 0, 2.00);

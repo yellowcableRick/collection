@@ -5,10 +5,11 @@ namespace YellowCable\Collection\Tests\Traits\Datastore;
 use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Test;
 use YellowCable\Collection\Traits\Datastore\DataProviderTrait;
 use YellowCable\Collection\Traits\Datastore\PrimaryKeysTrait;
 
-class DataProviderTraitTest extends TestCase
+class DataProviderTraitTest extends Test
 {
     public function test(): void
     {

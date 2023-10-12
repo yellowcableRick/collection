@@ -5,6 +5,7 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd"
          failOnWarning="true"
          displayDetailsOnTestsThatTriggerWarnings="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
 >
   <coverage/>
   <php>
@@ -13,7 +14,12 @@
   </php>
   <testsuites>
     <testsuite name="Tests">
-      <directory>tests/</directory>
+      <directory>tests</directory>
+      <exclude>tests/Test.php</exclude>
+      <exclude>tests/SpeedTest.php</exclude>
+    </testsuite>
+    <testsuite name="SpeedTest">
+      <file>tests/SpeedTest.php</file>
     </testsuite>
   </testsuites>
   <logging>

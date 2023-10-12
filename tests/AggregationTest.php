@@ -3,18 +3,17 @@
 namespace YellowCable\Collection\Tests;
 
 use Exception;
-use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Aggregation;
-use YellowCable\Collection\CollectionInterface;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
+use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Example\ItemAggregation;
 use YellowCable\Collection\Tests\Example\ItemCollection;
 
-class AggregationTest extends TestCase
+class AggregationTest extends Test
 {
     /**
      * @throws DuplicateItemException
@@ -38,8 +37,6 @@ class AggregationTest extends TestCase
         $this->assertTrue(Aggregation::remove("test"));
         $this->expectException(DoesNotExistException::class);
         Aggregation::get("test")->getItem(fn(CollectionInterface $x) => $x->getIdentifier() === "test");
-        $this->expectException(NotImplementedException::class);
-        Aggregation::disaggregate(Aggregation::get("test"));
     }
 
     /**

@@ -5,10 +5,9 @@ namespace YellowCable\Collection\Traits\Datastore;
 use Exception;
 use Throwable;
 use YellowCable\Collection\Collection;
-use YellowCable\Collection\CollectionInterface;
-use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Exceptions\FailedToPersistException;
 use YellowCable\Collection\Exceptions\FailedToUnpersistException;
+use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Interfaces\PersistenceInterface;
 
 /**
@@ -18,7 +17,7 @@ use YellowCable\Collection\Interfaces\PersistenceInterface;
  */
 trait PersistenceTrait
 {
-    protected const PERSISTENT_PREFIX = "PersistenceTrait-";
+    protected static string $PERSISTENT_PREFIX = "PersistenceTrait-";
     public static PersistenceInterface $persistenceService;
 
     /**
@@ -36,12 +35,12 @@ trait PersistenceTrait
         }
         try {
             self::$persistenceService::put(
-                self::PERSISTENT_PREFIX . $collection->getIdentifier(),
+                self::$PERSISTENT_PREFIX . $collection->getIdentifier(),
                 fn() => gzdeflate(serialize($collection))
             );
             return $collection;
-        } catch (Throwable) {
-            throw new FailedToPersistException();
+        } catch (Throwable $e) {
+            throw new FailedToPersistException($e);
         }
     }
 
@@ -55,7 +54,7 @@ trait PersistenceTrait
     public static function unpersistCollection(CollectionInterface $collection): void
     {
         try {
-            self::$persistenceService->delete(self::PERSISTENT_PREFIX . $collection->getIdentifier());
+            self::$persistenceService->delete(self::$PERSISTENT_PREFIX . $collection->getIdentifier());
         } catch (Throwable) {
             throw new FailedToUnpersistException();
         }
@@ -71,7 +70,7 @@ trait PersistenceTrait
     public static function getPersistence(string $identifier): ?CollectionInterface
     {
         try {
-            $cache = self::$persistenceService->get(self::PERSISTENT_PREFIX . $identifier);
+            $cache = self::$persistenceService->get(self::$PERSISTENT_PREFIX . $identifier);
             if (is_string($cache)) {
                 return unserialize(gzinflate($cache));
             }

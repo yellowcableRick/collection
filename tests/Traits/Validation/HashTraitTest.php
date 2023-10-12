@@ -2,9 +2,9 @@
 
 namespace YellowCable\Collection\Tests\Traits\Validation;
 
-use YellowCable\Collection\CollectionInterface;
-use YellowCable\Collection\CollectionTrait;
+use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Test;
+use YellowCable\Collection\Traits\CollectionTrait;
 use YellowCable\Collection\Traits\Validation\HashTrait;
 
 class HashTraitTest extends Test

@@ -8,7 +8,7 @@ use YellowCable\Collection\Tests\Test;
 
 class SeekableIteratorTrait extends Test
 {
-    public function testSeekable()
+    public function testSeekable(): void
     {
         $collection = new ItemCollection("", [
             new Item("item1", 0, 1.00),

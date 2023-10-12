@@ -4,7 +4,6 @@ namespace YellowCable\Collection\Tests\Example;
 
 use Exception;
 use Throwable;
-use YellowCable\Collection\Exceptions\FailedToPersistException;
 use YellowCable\Collection\Interfaces\PersistenceInterface;
 
 class PersistenceService implements PersistenceInterface

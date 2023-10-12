@@ -1,7 +1,12 @@
 <?php
 
-namespace YellowCable\Collection;
+namespace YellowCable\Collection\Traits;
 
+use YellowCable\Collection\Collection;
+use YellowCable\Collection\Interfaces\AggregationInterface;
+use YellowCable\Collection\Interfaces\CollectionInterface;
+use YellowCable\Collection\Tests\Example\FullTraitedItemAggregation;
+use YellowCable\Collection\Tests\Example\FullTraitedItemCollection;
 use YellowCable\Collection\Traits\Generic\ArrayAccessTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
 use YellowCable\Collection\Traits\Generic\IteratorTrait;
@@ -50,9 +55,9 @@ trait CollectionTrait
     /**
      * Return this collection and all additional information, but without the actual collection.
      *
-     * @return Collection
+     * @return CollectionInterface
      */
-    public function getEncapsulation(): self
+    public function getEncapsulation(): CollectionInterface
     {
         $encapsulation = clone($this);
         $encapsulation->fixedCount = $this->count();
@@ -109,9 +114,9 @@ trait CollectionTrait
      * Setter for the identifier of the collection.
      *
      * @param string $identifier
-     * @return $this
+     * @return CollectionInterface
      */
-    public function setIdentifier(string $identifier): self
+    public function setIdentifier(string $identifier): CollectionInterface
     {
         $this->identifier = $identifier;
         return $this;
