@@ -5,7 +5,6 @@ namespace YellowCable\Collection\Traits;
 use YellowCable\Collection\Aggregation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
-use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 

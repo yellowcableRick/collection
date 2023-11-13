@@ -4,6 +4,9 @@ namespace YellowCable\Collection\Traits\Generic;
 
 trait IteratorTrait
 {
+    /** @var int $index Iterator index which holds the current iteration key */
+    private int $index;
+
     /**
      * @inheritDoc
      */

@@ -2,6 +2,7 @@
 
 namespace YellowCable\Collection\Tests\Example;
 
+use YellowCable\Collection\Collection;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Traits\Calculation\Counter\CounterTrait;
 use YellowCable\Collection\Traits\Calculation\MaxTrait;
@@ -11,9 +12,13 @@ use YellowCable\Collection\Traits\Datastore\DataProviderTrait;
 use YellowCable\Collection\Traits\Datastore\PersistenceTrait;
 use YellowCable\Collection\Traits\Datastore\PrimaryKeysTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
+use YellowCable\Collection\Traits\Generic\GeneratorTrait;
+use YellowCable\Collection\Traits\Manipulation\FilterTrait;
+use YellowCable\Collection\Traits\Manipulation\SortTrait;
+use YellowCable\Collection\Traits\Manipulation\SplitTrait;
 use YellowCable\Collection\Traits\Validation\HashTrait;
 
-class FullTraitedItemCollection implements CollectionInterface
+class FullTraitedItemCollection extends Collection implements CollectionInterface
 {
     use CollectionTrait;
     use CountableTrait;
@@ -24,6 +29,10 @@ class FullTraitedItemCollection implements CollectionInterface
     use PrimaryKeysTrait;
     use DataProviderTrait;
     use HashTrait;
+    use FilterTrait;
+    use SortTrait;
+    use SplitTrait;
+    use GeneratorTrait;
 
     public function getClass(): string
     {

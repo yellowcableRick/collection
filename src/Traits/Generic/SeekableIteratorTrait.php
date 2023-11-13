@@ -6,6 +6,11 @@ use OutOfBoundsException;
 
 trait SeekableIteratorTrait
 {
+    /** @var int $index Iterator index which holds the current iteration key */
+    private int $index;
+
+    abstract public function offsetGet(mixed $offset): mixed;
+
     /**
      * @inheritDoc
      */

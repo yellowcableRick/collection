@@ -14,6 +14,6 @@ class MagicMethodsTraitTest extends Test
 
     public function testToString(): void
     {
-        $this->assertEquals("{\"collection\":[],\"index\":0,\"identifier\":\"\"}", (string) (new ItemCollection()));
+        $this->assertEquals('{"collection":[],"identifier":"","index":0}', (string) (new ItemCollection()));
     }
 }

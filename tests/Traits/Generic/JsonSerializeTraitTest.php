@@ -14,7 +14,7 @@ class JsonSerializeTraitTest extends Test
             new Item("item1", 0, 1.00)
         ]);
         $this->assertEquals(
-            '{"collection":[{"counter":0,"anything":1}],"index":0,"identifier":"jsonSerialize"}',
+            '{"collection":[{"counter":0,"anything":1}],"identifier":"jsonSerialize","index":0}',
             json_encode($collection)
         );
     }

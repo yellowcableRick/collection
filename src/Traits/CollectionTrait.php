@@ -2,11 +2,7 @@
 
 namespace YellowCable\Collection\Traits;
 
-use YellowCable\Collection\Collection;
-use YellowCable\Collection\Interfaces\AggregationInterface;
 use YellowCable\Collection\Interfaces\CollectionInterface;
-use YellowCable\Collection\Tests\Example\FullTraitedItemAggregation;
-use YellowCable\Collection\Tests\Example\FullTraitedItemCollection;
 use YellowCable\Collection\Traits\Generic\ArrayAccessTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
 use YellowCable\Collection\Traits\Generic\IteratorTrait;
@@ -25,8 +21,6 @@ trait CollectionTrait
 
     /** @var array<int, mixed> $collection Mixed array which will contain any type of item */
     private array $collection;
-    /** @var int $index Iterator index which holds the current iteration key */
-    private int $index;
     /** @var int $fixedCount Placeholder for the output of count, when the collection is cleared */
     private int $fixedCount;
     /** @var string $identifier String to hold a value to later identify this specific collection */
