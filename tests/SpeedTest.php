@@ -57,7 +57,8 @@ class SpeedTest extends Test
     public function testSpeed(): void
     {
         $time = time();
-        $aggregation = (new FullTraitedItemAggregation())->setIdentifier("SpeedTest");
+        $aggregation = new FullTraitedItemAggregation();
+        $aggregation->setIdentifier("SpeedTest");
         for ($i = 1; $i <= $this->rounds; $i++) {
             $this->build($i * $this->multiplier, $aggregation);
         }
@@ -67,7 +68,8 @@ class SpeedTest extends Test
         $this->assertions($aggregation, $time, 60);
 
         $secondTime = time();
-        $secondAggregation = (new FullTraitedItemAggregation())->setIdentifier("SpeedTest");
+        $secondAggregation = new FullTraitedItemAggregation();
+        $secondAggregation->setIdentifier("SpeedTest");
         $secondAggregation::$persistenceService = new PersistenceService();
         $secondAggregation->hydrate();
         foreach ($secondAggregation as $col) {

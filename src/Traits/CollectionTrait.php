@@ -5,6 +5,7 @@ namespace YellowCable\Collection\Traits;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Traits\Generic\ArrayAccessTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
+use YellowCable\Collection\Traits\Generic\GeneratorTrait;
 use YellowCable\Collection\Traits\Generic\IteratorTrait;
 use YellowCable\Collection\Traits\Generic\JsonSerializeTrait;
 use YellowCable\Collection\Traits\Generic\MagicMethodsTrait;
@@ -13,11 +14,12 @@ use YellowCable\Collection\Traits\Generic\SeekableIteratorTrait;
 trait CollectionTrait
 {
     use ArrayAccessTrait;
-    use IteratorTrait;
     use CountableTrait;
+    use GeneratorTrait;
+    use IteratorTrait;
     use JsonSerializeTrait;
-    use SeekableIteratorTrait;
     use MagicMethodsTrait;
+    use SeekableIteratorTrait;
 
     /** @var array<int, mixed> $collection Mixed array which will contain any type of item */
     private array $collection;
@@ -29,20 +31,26 @@ trait CollectionTrait
     /**
      * Set array as collection.
      *
-     * @param array $array
+     * @param iterable  $source
      * @param bool|null $verify
      * @return void
      */
-    protected function setCollection(array $array, ?bool $verify = true): void
+    protected function setCollection(iterable $source, ?bool $verify = true): void
     {
-        if ($verify && $array && $this->getClass()) {
+        if ($verify && $this->getClass()) {
             $this->collection = [];
             $i = 0;
-            foreach ($array as $item) {
+            foreach ($source as $item) {
                 $this->offsetSet($i++, $item);
             }
         } else {
-            $this->collection = array_values($array);
+            if (is_array($source)) {
+                $this->collection = array_values($source);
+            } else {
+                foreach ($source as $item) {
+                    $this->collection[] = $item;
+                }
+            }
         }
     }
 

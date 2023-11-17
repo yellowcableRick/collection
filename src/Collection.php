@@ -25,13 +25,14 @@ abstract class Collection implements CollectionInterface
      * Collection Constructor; Initializes class properties
      * and provides a way to directly import a collection from array.
      *
-     * @param array<int, mixed>|null $array Array of objects which should fill the collection.
-     * @param bool|null  $verify Boolean; verify if the passed array contains only items of the given class.
+     * @param string        $identifier
+     * @param iterable|null $source Iterator or array of objects which should fill the collection.
+     * @param bool|null     $verify Boolean; verify if the passed array contains only items of the given class.
      */
-    public function __construct(string $identifier = "", ?array $array = null, ?bool $verify = true)
+    public function __construct(string $identifier = "", ?iterable $source = null, ?bool $verify = true)
     {
         $this->setIdentifier($identifier);
-        $this->setCollection($array ?? [], $verify);
+        $this->setCollection($source ?? [], $verify);
         $this->rewind();
     }
 }
