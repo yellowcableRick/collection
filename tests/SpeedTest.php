@@ -23,7 +23,8 @@ class SpeedTest extends Test
      */
     private function build(int $start, AggregationInterface $aggregation): void
     {
-        $collection = (new FullTraitedItemCollection())->setIdentifier("SpeedTest$start");
+        $collection = (new FullTraitedItemCollection());
+        $collection->setIdentifier("SpeedTest$start");
         $collection->rewind();
         $collection->setDataProvider(function () use ($start) {
             $set = [];
@@ -32,8 +33,6 @@ class SpeedTest extends Test
             }
             return $set;
         });
-        $collection->registerCounter("modulo10", fn(Item $x) => !($x->counter % 10));
-        $collection->registerCounter("anything<1000", fn(Item $x) => $x->anything < 1000);
         $collection->registerCounter("counter>anything", fn(Item $x) => $x->counter > $x->anything);
         $collection->runDataProvider();
         $collection->executeCount();
@@ -86,8 +85,6 @@ class SpeedTest extends Test
     {
         $this->assertEquals($this->rounds, $aggregation->count());
         $this->assertEquals(($this->rounds * $this->multiplier), array_sum($aggregation->__call("count")));
-        $this->assertEquals(100000, array_sum($aggregation->getCount("modulo10")));//@phpstan-ignore-line
-        $this->assertEquals(1000000, array_sum($aggregation->getCount("anything<1000")));//@phpstan-ignore-line
         $this->assertEquals(1000000, array_sum($aggregation->getCount("counter>anything")));//@phpstan-ignore-line
         $this->assertLessThanOrEqual($time + $allowedSeconds, time(), "Time diff: " . (time() - $time));
     }

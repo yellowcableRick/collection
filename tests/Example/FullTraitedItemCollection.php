@@ -12,7 +12,10 @@ use YellowCable\Collection\Traits\Datastore\DataProviderTrait;
 use YellowCable\Collection\Traits\Datastore\PersistenceTrait;
 use YellowCable\Collection\Traits\Datastore\PrimaryKeysTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
+use YellowCable\Collection\Traits\Generic\FirstTrait;
 use YellowCable\Collection\Traits\Generic\GeneratorTrait;
+use YellowCable\Collection\Traits\Locators\FirstIdentifierMatchTrait;
+use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 use YellowCable\Collection\Traits\Manipulation\FilterTrait;
 use YellowCable\Collection\Traits\Manipulation\SortTrait;
 use YellowCable\Collection\Traits\Manipulation\SplitTrait;
@@ -33,6 +36,8 @@ class FullTraitedItemCollection extends Collection implements CollectionInterfac
     use SortTrait;
     use SplitTrait;
     use GeneratorTrait;
+    use FirstTrait;
+    use IterativeGetTrait;
 
     public function getClass(): string
     {

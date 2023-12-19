@@ -5,6 +5,7 @@ namespace YellowCable\Collection\Traits\Manipulation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\SplitException;
 use YellowCable\Collection\Interfaces\CollectionInterface;
+use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 
 trait SplitTrait
 {
@@ -12,6 +13,8 @@ trait SplitTrait
     public function split(callable $condition): CollectionInterface
     {
         $collection = new class ($this->getIdentifier()) extends Collection {
+            use IterativeGetTrait;
+
             public function getClass(): string
             {
                 return CollectionInterface::class;

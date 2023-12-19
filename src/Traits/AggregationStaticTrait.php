@@ -5,50 +5,64 @@ namespace YellowCable\Collection\Traits;
 use YellowCable\Collection\Aggregation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
+use YellowCable\Collection\Exceptions\EmptyException;
+use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
 use YellowCable\Collection\Interfaces\CollectionInterface;
+use YellowCable\Collection\Interfaces\FirstIdentifierMatchInterface;
+use YellowCable\Collection\Interfaces\IterativeGetInterface;
+use YellowCable\Collection\Traits\Locators\FirstIdentifierMatchTrait;
+use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 
 trait AggregationStaticTrait
 {
-    /** @var CollectionInterface $aggregations */
-    private static CollectionInterface $aggregations;
+    /** @var CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface $aggregations */
+    private static CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface $aggregations;
 
     /**
      * Get an array of all Aggregations registered in the static list.
      *
      * @return CollectionInterface
      */
-    public static function registry(): CollectionInterface
+    public static function registry(): CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface
     {
-        return self::$aggregations ?? self::$aggregations = new class () extends Collection
-        {
-            /**
-             * @inheritDoc
-             */
-            public function getClass(): string
+        /** @var CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface $bliep */
+        $bliep =
+            new class () extends Collection implements FirstIdentifierMatchInterface, IterativeGetInterface
             {
-                return AggregationInterface::class;
-            }
-        };
+                use FirstIdentifierMatchTrait;
+                use IterativeGetTrait;
+
+                /**
+                 * @inheritDoc
+                 */
+                public function getClass(): string
+                {
+                    return AggregationInterface::class;
+                }
+            };
+
+        return self::$aggregations ?? self::$aggregations = $bliep;
     }
 
     /**
      * Aggregate a Collection.
      *
      * @param CollectionInterface $collection
-     * @param bool       $preventDuplicates
+     * @param bool                $preventDuplicates
      * @return AggregationInterface
      * @throws DoesNotExistException
+     * @throws EmptyException
+     * @throws NotImplementedException
      */
     public static function aggregate(
         CollectionInterface $collection,
         bool $preventDuplicates = true
     ): AggregationInterface {
-        if (
-            !self::registry()->getItem(
-                fn(AggregationInterface $x) => $x->getIdentifier() === $collection->getIdentifier()
-            )
-        ) {
+        try {
+            self::get($collection->getIdentifier())
+                ?? throw new DoesNotExistException();
+        } catch (EmptyException | DoesNotExistException) {
             (new class ($collection->getIdentifier()) extends Aggregation implements AggregationInterface {
                 public function getClass(): string
                 {
@@ -67,12 +81,16 @@ trait AggregationStaticTrait
      *
      * @return AggregationInterface
      * @throws DoesNotExistException
+     * @throws EmptyException
+     * @throws NotImplementedException
      */
     public static function get(string $identifier): AggregationInterface
     {
-        return self::registry()->getItem(
-            fn(AggregationInterface $x) => $x->getIdentifier() === $identifier
-        ) ?? throw new DoesNotExistException("Aggregation does not exist!");
+        try {
+            return self::registry()->getFirstIdentifierMatch($identifier) ?? throw new DoesNotExistException();
+        } catch (EmptyException) {
+            throw new DoesNotExistException("Aggregation does not exist!");
+        }
     }
 
     /**

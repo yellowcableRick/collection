@@ -44,6 +44,6 @@ trait IteratorTrait
      */
     public function rewind(): void
     {
-        $this->index = 0;
+        $this->index = (count($this->collection) === 0) ? 0 : min(array_keys($this->collection));
     }
 }

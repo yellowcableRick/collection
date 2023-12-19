@@ -26,17 +26,16 @@ class AggregationTest extends Test
         $col = new ItemCollection("test", [new Item("test", 1, 1)]);
         Aggregation::aggregate($col, false);
         $this->assertEquals(
-            Aggregation::get("test")->getItem(fn(CollectionInterface $x) => $x->getIdentifier() === "test"),
+            Aggregation::get("test")[0],
             $col->getEncapsulation()
         );
         $this->assertEquals(
-            Aggregation::registry()->getItem(fn(CollectionInterface $x) => $x->getIdentifier() === "test")
-                ->getItem(fn(CollectionInterface $x) => $x->getIdentifier() === "test"),
+            Aggregation::registry()->getFirstIdentifierMatch("test")[0],
             $col->getEncapsulation()
         );
         $this->assertTrue(Aggregation::remove("test"));
         $this->expectException(DoesNotExistException::class);
-        Aggregation::get("test")->getItem(fn(CollectionInterface $x) => $x->getIdentifier() === "test");
+        Aggregation::get("test");
     }
 
     /**
@@ -60,8 +59,10 @@ class AggregationTest extends Test
      */
     public function testDuplicationVerification()
     {
-        $agg = new ItemAggregation("bliep");
+        $agg = new ItemAggregation("blaat");
+        $agg->addCollection(new ItemCollection("test", [new Item("item", 1, 1)]), false);
+        $agg2 = new ItemAggregation("blaat");
         $this->expectException(ValidationException::class);
-        $agg->addCollection(new ItemCollection("test", [new Item("item", 1, 1)]));
+        $agg2->addCollection(new ItemCollection("test", [new Item("item", 1, 1)]));
     }
 }

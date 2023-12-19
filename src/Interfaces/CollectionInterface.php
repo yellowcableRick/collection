@@ -27,8 +27,8 @@ interface CollectionInterface extends
      */
     public function getClass(): string;
     public function getEncapsulation(): self;
-    public function getKey(callable $condition): ?int;
-    public function getItem(callable $condition): mixed;
+//    public function getKey(callable $condition): ?int;
+//    public function getItem(callable $condition): mixed;
     public function getIdentifier(): string;
     public function setIdentifier(string $identifier): self;
 }

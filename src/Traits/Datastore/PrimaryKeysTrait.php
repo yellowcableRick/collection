@@ -33,25 +33,31 @@ trait PrimaryKeysTrait
      */
     public function getPrimaryKeyValues(): array
     {
-        $primaryKeys = [];
+        if (!$this->primaryKeyValues) {
+            $primaryKeys = [];
 
-        foreach ($this as $item) {
-            if (is_object($item)) {
-                if (!isset($primaryKeys[$item::class])) {
-                    $primaryKeys[$item::class] = [];
-                }
+            foreach ($this as $key => $item) {
+                if (is_object($item)) {
+                    if (!isset($primaryKeys[$item::class])) {
+                        $primaryKeys[$item::class] = [];
+                    }
 
-                if ($primaryKey = $this->getPrimaryKey()) {
-                    if (isset($item->$primaryKey)) {
-                        $primaryKeys[$item::class][] = $item->$primaryKey;
-                    } elseif (method_exists($item, $primaryKey)) {
-                        $primaryKeys[$item::class][] = $item->$primaryKey();
+                    $primaryKey = $this->getPrimaryKey();
+                    if (method_exists($item, $primaryKey)) {
+                        $primaryKeys[$item::class][$key] = $item->$primaryKey();
+                    } elseif (method_exists($item, "get" . ucfirst($primaryKey))) {
+                        $keyGetter = "get" . ucfirst($primaryKey);
+                        $primaryKeys[$item::class][$key] = $item->$keyGetter();
+                    } elseif (property_exists($item, $primaryKey)) {
+                        $primaryKeys[$item::class][$key] = $item->$primaryKey;
                     }
                 }
             }
-        }
 
-        return $this->primaryKeyValues ?? $this->primaryKeyValues = $primaryKeys;
+            return $this->primaryKeyValues = $primaryKeys;
+        } else {
+            return $this->primaryKeyValues;
+        }
     }
 
     /**
@@ -63,7 +69,55 @@ trait PrimaryKeysTrait
      */
     public function isPrimaryKeyPresent(int|string $primaryKey, ?string $class = ""): bool
     {
-        $array = $this->primaryKeyValues ?? $this->getPrimaryKeyValues();
-        return key_exists($class, $array) && in_array($primaryKey, $array[$class]);
+        return key_exists($class, $this->getPrimaryKeyValues()) &&
+            in_array($primaryKey, $this->getPrimaryKeyValues()[$class]);
+    }
+
+    public function getItemByPrimaryKey(int|string $primaryKey, ?string $class = ""): object|null
+    {
+        if (key_exists($class, $this->getPrimaryKeyValues())) {
+            foreach ($this->getPrimaryKeyValues()[$class] as $key => $primary) {
+                if ($primaryKey === $primary) {
+                    return $this[$key];
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check what the key of the collection is for a certain item. Returns null if the object isn't found.
+     *
+     * @param object $target
+     * @return int|string|null
+     */
+
+    public function getCollectionKey(object $target): int|string|null
+    {
+        $primaryKey = $this->getPrimaryKey();
+        if (method_exists($target, $primaryKey)) {
+            $targetKey = $target->$primaryKey();
+            foreach ($this as $key => $item) {
+                if ($targetKey === $item->$primaryKey()) {
+                    return $key;
+                }
+            }
+        } elseif (method_exists($target, "get" . ucfirst($primaryKey))) {
+            $keyGet = "get" . ucfirst($primaryKey);
+            $targetKey = $target->$keyGet();
+            foreach ($this as $key => $item) {
+                if ($targetKey === $item->$keyGet()) {
+                    return $key;
+                }
+            }
+        } elseif (property_exists($target, $primaryKey)) {
+            foreach ($this as $key => $item) {
+                if ($target->$primaryKey === $item->$primaryKey) {
+                    return $key;
+                }
+            }
+        }
+
+        return null;
     }
 }

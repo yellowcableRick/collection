@@ -24,12 +24,11 @@ class ArrayAccessTraitTest extends Test
         $this->assertTrue($collection[2]->getName() === $item2->getName());
         $this->assertTrue($collection->count() === 2);
 
-        $key = $collection->getKey(fn (Item $i) => $i->getName() === $item1->getName());
-        $collection->offsetSet($key, $item3);
-        $this->assertTrue($collection->offsetGet($key)->getName() === $item3->getName());
+        $collection->offsetSet(1, $item3);
+        $this->assertTrue($collection->offsetGet(1)->getName() === $item3->getName());
 
         $collection->offsetSet(null, $item4);
-        $this->assertEquals(3, $collection->getKey(fn (Item $i) => $i->getName() === $item4->getName()));
+        $this->assertEquals($item4, $collection[3]);
 
         $this->assertEquals(null, $collection->offsetGet(0));
 

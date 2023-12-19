@@ -5,16 +5,19 @@ namespace YellowCable\Collection\Traits;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Traits\Generic\ArrayAccessTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
+use YellowCable\Collection\Traits\Generic\FirstTrait;
 use YellowCable\Collection\Traits\Generic\GeneratorTrait;
 use YellowCable\Collection\Traits\Generic\IteratorTrait;
 use YellowCable\Collection\Traits\Generic\JsonSerializeTrait;
 use YellowCable\Collection\Traits\Generic\MagicMethodsTrait;
 use YellowCable\Collection\Traits\Generic\SeekableIteratorTrait;
+use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 
 trait CollectionTrait
 {
     use ArrayAccessTrait;
     use CountableTrait;
+    use FirstTrait;
     use GeneratorTrait;
     use IteratorTrait;
     use JsonSerializeTrait;
@@ -22,7 +25,7 @@ trait CollectionTrait
     use SeekableIteratorTrait;
 
     /** @var array<int, mixed> $collection Mixed array which will contain any type of item */
-    private array $collection;
+    private array $collection = [];
     /** @var int $fixedCount Placeholder for the output of count, when the collection is cleared */
     private int $fixedCount;
     /** @var string $identifier String to hold a value to later identify this specific collection */
@@ -37,8 +40,8 @@ trait CollectionTrait
      */
     protected function setCollection(iterable $source, ?bool $verify = true): void
     {
+        $this->collection = [];
         if ($verify && $this->getClass()) {
-            $this->collection = [];
             $i = 0;
             foreach ($source as $item) {
                 $this->offsetSet($i++, $item);
@@ -66,40 +69,6 @@ trait CollectionTrait
         $encapsulation->collection = [];
         $encapsulation->rewind();
         return $encapsulation;
-    }
-
-    /**
-     * Get the first key from the collection where the item meets the condition.
-     *
-     * @param callable $condition
-     * @return int|null
-     */
-    public function getKey(callable $condition): ?int
-    {
-        foreach ($this->collection as $key => $item) {
-            if ($condition($item)) {
-                return $key;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the first item from the collection where the item meets the condition.
-     *
-     * @param callable $condition
-     * @return mixed
-     */
-    public function getItem(callable $condition): mixed
-    {
-        foreach ($this->collection as $item) {
-            if ($condition($item)) {
-                return $item;
-            }
-        }
-
-        return null;
     }
 
     /**

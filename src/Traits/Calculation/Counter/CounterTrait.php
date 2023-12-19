@@ -6,6 +6,7 @@ use Exception;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 use YellowCable\Collection\Collection;
+use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 
 /**
@@ -25,7 +26,7 @@ trait CounterTrait
      *
      * @var Collection
      */
-    private Collection $counters;
+    private CounterCollection $counters;
 
     private function getCounters(): object
     {
@@ -83,7 +84,9 @@ trait CounterTrait
      */
     public function getCount(string $name): int
     {
-        return (int) $this->getCounters()->getItem(fn($x) => $x->name === $name)->result;
+        return $this->getCounters()->isPrimaryKeyPresent($name, Counter::class) ?
+            (int) $this->getCounters()->getItem(fn($x) => $x->name === $name)->result :
+            throw new DoesNotExistException("Counter with name $name does not exist.");
     }
 
     /**

@@ -34,6 +34,16 @@ trait DataProviderTrait
     abstract public function offsetSet(mixed $offset, mixed $value): void;
 
     /**
+     * @inheritDoc
+     */
+    abstract public function getPrimaryKey(): string;
+
+    /**
+     * @inheritDoc
+     */
+    abstract public function getCollectionKey(object $target): int|string|null;
+
+    /**
      * Setter for the dataProvider property. Uses Laravel\SerializableClosure
      * to ensure the serialization of the property.
      *
@@ -103,18 +113,9 @@ trait DataProviderTrait
     public function runUpdateProvider(mixed ...$args): static
     {
         $changes = 0;
-        if (method_exists($this, "getPrimaryKey") && $primaryKey = $this->getPrimaryKey()) {
+        if (method_exists($this, "getPrimaryKey")) {
             foreach ($this->updateProvider->getClosure()(...$args) as $item) {
-                if (method_exists($item, "get" . ucfirst($primaryKey))) {
-                    $getter = "get" . ucfirst($primaryKey);
-                    $reference = $item->$getter();
-                    $this->offsetSet($this->getKey(fn($x) => $x->$getter() === $reference), $item);
-                    $changes++;
-                } elseif (property_exists($item, $primaryKey)) {
-                    $reference = $item->$$primaryKey;
-                    $this->offsetSet($this->getKey(fn($x) => $x->$$primaryKey === $reference), $item);
-                    $changes++;
-                }
+                $this->offsetSet($this->getCollectionKey($item), $item);
             }
         } else {
             foreach ($this->updateProvider->getClosure()(...$args) as $item) {
@@ -153,7 +154,7 @@ trait DataProviderTrait
      */
     public function runCountProvider(mixed ...$args): static
     {
-        $sourceCount = $this->updateProvider->getClosure()(...$args);
+        $sourceCount = $this->countProvider->getClosure()(...$args);
         if ($sourceCount !== $this->count()) {
             throw new UnequalCountException("Source: $sourceCount. Collection: {$this->count()}");
         }

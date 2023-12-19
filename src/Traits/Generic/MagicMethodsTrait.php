@@ -27,8 +27,9 @@ trait MagicMethodsTrait
     {
         $output = [];
         foreach ($this as $item) {
+            $identifier = method_exists($item, "getIdentifier") ? $item->getIdentifier() : null;
             !method_exists($item, $name) ?:
-                $output[$item->getIdentifier()] = call_user_func_array([$item, $name], $arguments);
+                $output[$identifier] = call_user_func_array([$item, $name], $arguments);
         }
 
         return $output;
