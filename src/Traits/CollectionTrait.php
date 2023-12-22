@@ -10,7 +10,6 @@ use YellowCable\Collection\Traits\Generic\IteratorTrait;
 use YellowCable\Collection\Traits\Generic\JsonSerializeTrait;
 use YellowCable\Collection\Traits\Generic\MagicMethodsTrait;
 use YellowCable\Collection\Traits\Generic\SeekableIteratorTrait;
-use YellowCable\Collection\Traits\Locators\FirstTrait;
 
 /**
  * @template Item
@@ -19,7 +18,6 @@ trait CollectionTrait
 {
     use ArrayAccessTrait;
     use CountableTrait;
-    use FirstTrait;
     /** @use GeneratorTrait<Item> */
     use GeneratorTrait;
     /** @use IteratorTrait<Item> */

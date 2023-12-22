@@ -15,6 +15,7 @@ use YellowCable\Collection\Traits\Generic\CountableTrait;
 use YellowCable\Collection\Traits\Generic\GeneratorTrait;
 use YellowCable\Collection\Traits\Locators\FirstTrait;
 use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
+use YellowCable\Collection\Traits\Locators\LastTrait;
 use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
 use YellowCable\Collection\Traits\Manipulation\FilterTrait;
 use YellowCable\Collection\Traits\Manipulation\SortTrait;
@@ -37,7 +38,10 @@ class FullTraitedItemCollection extends Collection
     use FilterTrait;
     use SortTrait;
     use SplitTrait;
+    /** @use FirstTrait<Item> */
     use FirstTrait;
+    /** @use LastTrait<Item> */
+    use LastTrait;
     use IterativeGetTrait;
 
     public function getClass(): string

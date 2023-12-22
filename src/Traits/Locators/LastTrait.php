@@ -2,20 +2,19 @@
 
 namespace YellowCable\Collection\Traits\Locators;
 
-use YellowCable\Collection\Attributes\Item;
 use YellowCable\Collection\Exceptions\EmptyException;
 
 /**
  * @template Item
  */
-trait FirstTrait
+trait LastTrait
 {
     /**
      * @return Item
      * @throws EmptyException
      */
-    public function first(): mixed
+    public function last(): mixed
     {
-        return reset($this->collection) ?: throw new EmptyException();
+        return end($this->collection) ?: throw new EmptyException();
     }
 }
