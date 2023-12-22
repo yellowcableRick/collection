@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Interfaces;
+namespace YellowCable\Collection\Interfaces\Datastore;
 
 interface PersistenceInterface
 {

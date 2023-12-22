@@ -8,7 +8,7 @@ use YellowCable\Collection\Tests\Test;
 
 class IteratorTraitTest extends Test
 {
-    public function testIterator()
+    public function testIterator(): void
     {
         $collection = new ItemCollection("", [
             new Item("item1", 0, 1.00),

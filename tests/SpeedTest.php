@@ -72,7 +72,6 @@ class SpeedTest extends Test
         $secondAggregation::$persistenceService = new PersistenceService();
         $secondAggregation->hydrate();
         foreach ($secondAggregation as $col) {
-            /** @var FullTraitedItemCollection $col */
             $col->runUpdateProvider();
             $col->registerCounter("anything=3000000", fn (Item $x) => $x->anything === 3000000);
             $col->executeCount(); //@TODO: Should be updateCount();

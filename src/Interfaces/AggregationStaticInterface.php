@@ -3,6 +3,8 @@
 namespace YellowCable\Collection\Interfaces;
 
 use YellowCable\Collection\Aggregation;
+use YellowCable\Collection\Interfaces\Locators\FirstIdentifierMatchInterface;
+use YellowCable\Collection\Interfaces\Locators\IterativeGetInterface;
 
 /**
  * @template Item

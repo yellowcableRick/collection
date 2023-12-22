@@ -6,12 +6,11 @@ use YellowCable\Collection\Aggregation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\EmptyException;
-use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
 use YellowCable\Collection\Interfaces\AggregationStaticInterface;
 use YellowCable\Collection\Interfaces\CollectionInterface;
-use YellowCable\Collection\Interfaces\FirstIdentifierMatchInterface;
-use YellowCable\Collection\Interfaces\IterativeGetInterface;
+use YellowCable\Collection\Interfaces\Locators\FirstIdentifierMatchInterface;
+use YellowCable\Collection\Interfaces\Locators\IterativeGetInterface;
 use YellowCable\Collection\Traits\Locators\FirstIdentifierMatchTrait;
 use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 

@@ -8,7 +8,7 @@ use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\FailedToPersistException;
 use YellowCable\Collection\Exceptions\FailedToUnpersistException;
 use YellowCable\Collection\Interfaces\CollectionInterface;
-use YellowCable\Collection\Interfaces\PersistenceInterface;
+use YellowCable\Collection\Interfaces\Datastore\PersistenceInterface;
 
 /**
  * PersistenceTrait allows any type of collection to be cached in a cache using PersistenceService.

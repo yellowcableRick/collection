@@ -2,6 +2,7 @@
 
 namespace YellowCable\Collection\Tests\Traits\Manipulation;
 
+use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
@@ -32,6 +33,9 @@ class SortTraitTest extends Test
         }
     }
 
+    /**
+     * @throws FailedInheritanceException
+     */
     public function testUasort(): void
     {
         $collection = new FullTraitedItemCollection("test", [
@@ -49,7 +53,6 @@ class SortTraitTest extends Test
         $this->assertEquals("46", $collection[3]?->getName());
         $this->assertEquals("10", $collection[0]?->getName());
 
-        /** @var Item $item */
         foreach ($collection->generator() as $item) {
             $this->assertEquals("1", $item->getName());
             break;

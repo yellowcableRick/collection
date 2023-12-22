@@ -3,7 +3,7 @@
 namespace YellowCable\Collection\Traits\Calculation\Counter;
 
 use YellowCable\Collection\Collection;
-use YellowCable\Collection\Interfaces\IterativeGetInterface;
+use YellowCable\Collection\Interfaces\Locators\IterativeGetInterface;
 use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
 

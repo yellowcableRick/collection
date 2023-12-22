@@ -20,6 +20,7 @@ trait CollectionTrait
     use ArrayAccessTrait;
     use CountableTrait;
     use FirstTrait;
+    /** @use GeneratorTrait<Item> */
     use GeneratorTrait;
     /** @use IteratorTrait<Item> */
     use IteratorTrait;

@@ -22,7 +22,6 @@ class SplitTraitTest extends Test
         ]);
         $splits = $collection->split(fn(Item $x) => (string) $x->counter);
         $this->assertEquals(2, $splits->count());
-        /** @var FullTraitedItemCollection $x */
         $x = $splits->getItem(fn (FullTraitedItemCollection $col) => $col->getSplitIdentifier() === "2");
         $this->assertEquals(4, $x->count());
     }

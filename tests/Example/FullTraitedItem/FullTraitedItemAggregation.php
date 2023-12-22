@@ -35,7 +35,6 @@ class FullTraitedItemAggregation extends Aggregation
     use FilterTrait;
     use SortTrait;
     use SplitTrait;
-    use GeneratorTrait;
     use FirstTrait;
     use IterativeGetTrait;
     use FirstIdentifierMatchTrait;

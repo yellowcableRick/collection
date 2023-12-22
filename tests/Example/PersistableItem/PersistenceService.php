@@ -4,7 +4,7 @@ namespace YellowCable\Collection\Tests\Example\PersistableItem;
 
 use Exception;
 use Throwable;
-use YellowCable\Collection\Interfaces\PersistenceInterface;
+use YellowCable\Collection\Interfaces\Datastore\PersistenceInterface;
 
 class PersistenceService implements PersistenceInterface
 {
