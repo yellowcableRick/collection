@@ -5,37 +5,38 @@ namespace YellowCable\Collection\Traits;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Traits\Generic\ArrayAccessTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
-use YellowCable\Collection\Traits\Generic\FirstTrait;
 use YellowCable\Collection\Traits\Generic\GeneratorTrait;
 use YellowCable\Collection\Traits\Generic\IteratorTrait;
 use YellowCable\Collection\Traits\Generic\JsonSerializeTrait;
 use YellowCable\Collection\Traits\Generic\MagicMethodsTrait;
 use YellowCable\Collection\Traits\Generic\SeekableIteratorTrait;
-use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
+use YellowCable\Collection\Traits\Locators\FirstTrait;
 
+/**
+ * @template Item
+ */
 trait CollectionTrait
 {
     use ArrayAccessTrait;
     use CountableTrait;
     use FirstTrait;
     use GeneratorTrait;
+    /** @use IteratorTrait<Item> */
     use IteratorTrait;
     use JsonSerializeTrait;
     use MagicMethodsTrait;
     use SeekableIteratorTrait;
 
-    /** @var array<int, mixed> $collection Mixed array which will contain any type of item */
-    private array $collection = [];
-    /** @var int $fixedCount Placeholder for the output of count, when the collection is cleared */
-    private int $fixedCount;
+    /** @var array<int, Item> $collection Mixed array which will contain any type of item */
+    protected array $collection = [];
     /** @var string $identifier String to hold a value to later identify this specific collection */
-    private string $identifier;
+    protected string $identifier;
 
     /**
      * Set array as collection.
      *
-     * @param iterable  $source
-     * @param bool|null $verify
+     * @param iterable<Item>    $source
+     * @param bool|null         $verify
      * @return void
      */
     protected function setCollection(iterable $source, ?bool $verify = true): void
@@ -60,19 +61,19 @@ trait CollectionTrait
     /**
      * Return this collection and all additional information, but without the actual collection.
      *
-     * @return CollectionInterface
+     * @return CollectionInterface<Item>
      */
     public function getEncapsulation(): CollectionInterface
     {
         $encapsulation = clone($this);
-        $encapsulation->fixedCount = $this->count();
+        !property_exists($encapsulation, "fixedCount") ?: $encapsulation->fixedCount = $this->count();
         $encapsulation->collection = [];
         $encapsulation->rewind();
         return $encapsulation;
     }
 
     /**
-     * Getter for the identifier of the collection.
+     * @inheritDoc
      *
      * @return string
      */
@@ -82,10 +83,10 @@ trait CollectionTrait
     }
 
     /**
-     * Setter for the identifier of the collection.
+     * @inheritDoc
      *
      * @param string $identifier
-     * @return CollectionInterface
+     * @return CollectionInterface<Item>
      */
     public function setIdentifier(string $identifier): CollectionInterface
     {

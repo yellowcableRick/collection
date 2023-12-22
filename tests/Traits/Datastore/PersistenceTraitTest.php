@@ -8,8 +8,8 @@ use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\PersistableCollectionAggregation;
-use YellowCable\Collection\Tests\Example\PersistableItemCollection;
+use YellowCable\Collection\Tests\Example\PersistableItem\PersistableCollectionAggregation;
+use YellowCable\Collection\Tests\Example\PersistableItem\PersistableItemCollection;
 use YellowCable\Collection\Tests\Test;
 
 class PersistenceTraitTest extends Test

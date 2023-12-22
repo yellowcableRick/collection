@@ -6,12 +6,12 @@ use Exception;
 use YellowCable\Collection\Aggregation;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
+use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
-use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\ItemAggregation;
-use YellowCable\Collection\Tests\Example\ItemCollection;
+use YellowCable\Collection\Tests\Example\Item\ItemAggregation;
+use YellowCable\Collection\Tests\Example\Item\ItemCollection;
 
 class AggregationTest extends Test
 {
@@ -34,7 +34,7 @@ class AggregationTest extends Test
             $col->getEncapsulation()
         );
         $this->assertTrue(Aggregation::remove("test"));
-        $this->expectException(DoesNotExistException::class);
+        $this->expectException(EmptyException::class);
         Aggregation::get("test");
     }
 

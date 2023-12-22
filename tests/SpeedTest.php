@@ -7,10 +7,10 @@ use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
-use YellowCable\Collection\Tests\Example\FullTraitedItemAggregation;
-use YellowCable\Collection\Tests\Example\FullTraitedItemCollection;
+use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemAggregation;
+use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\PersistenceService;
+use YellowCable\Collection\Tests\Example\PersistableItem\PersistenceService;
 
 class SpeedTest extends Test
 {
@@ -64,7 +64,7 @@ class SpeedTest extends Test
         $aggregation::$persistenceService = new PersistenceService();
         $aggregation->persist();
 
-        $this->assertions($aggregation, $time, 60);
+        $this->assertions($aggregation, $time, 30);
 
         $secondTime = time();
         $secondAggregation = new FullTraitedItemAggregation();

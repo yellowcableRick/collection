@@ -2,13 +2,13 @@
 
 namespace YellowCable\Collection\Tests\Traits\Locators;
 
+use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
-use YellowCable\Collection\Tests\Example\FullTraitedItemAggregation;
-use YellowCable\Collection\Tests\Example\FullTraitedItemCollection;
-use PHPUnit\Framework\TestCase;
+use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemAggregation;
+use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
 
 class FirstIdentifierMatchTraitTest extends TestCase

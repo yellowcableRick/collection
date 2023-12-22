@@ -1,7 +1,8 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Example;
+namespace YellowCable\Collection\Tests\Example\PersistableItem;
 
+use YellowCable\Collection\Tests\Example\Item\ItemAggregation;
 use YellowCable\Collection\Traits\Datastore\PersistenceTrait;
 
 class PersistableCollectionAggregation extends ItemAggregation

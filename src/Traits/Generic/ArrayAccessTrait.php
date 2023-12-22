@@ -4,6 +4,8 @@ namespace YellowCable\Collection\Traits\Generic;
 
 trait ArrayAccessTrait
 {
+    abstract public function getClass(): string;
+
     /**
      * @inheritDoc
      */

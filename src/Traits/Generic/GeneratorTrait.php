@@ -10,6 +10,14 @@ trait GeneratorTrait
     {
         yield from $this->collection;
     }
+
+    public function keyGenerator(): Generator
+    {
+        foreach (array_keys($this->collection) as $key) {
+            yield $key;
+        }
+    }
+
     public function keyValueGenerator(): Generator
     {
         foreach ($this->collection as $key => $item) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Generic;
+namespace YellowCable\Collection\Traits\Locators;
 
 use YellowCable\Collection\Exceptions\EmptyException;
 

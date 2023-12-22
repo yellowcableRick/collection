@@ -3,7 +3,7 @@
 namespace YellowCable\Collection\Tests;
 
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\ItemCollection;
+use YellowCable\Collection\Tests\Example\Item\ItemCollection;
 
 class CollectionTest extends Test
 {
@@ -26,8 +26,8 @@ class CollectionTest extends Test
             new Item("1", 1, 1),
             new Item("1", 1, 1),
         ]);
-        $encapsulation = $collection->getEncapsulation();
         $this->assertEquals(4, $collection->count());
+        $encapsulation = $collection->getEncapsulation();
         $this->assertEquals(4, $encapsulation->count());
         $this->assertNotNull($collection->offsetGet(0));
         $this->assertNull($encapsulation->offsetGet(0));

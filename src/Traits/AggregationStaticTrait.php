@@ -8,21 +8,26 @@ use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
+use YellowCable\Collection\Interfaces\AggregationStaticInterface;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Interfaces\FirstIdentifierMatchInterface;
 use YellowCable\Collection\Interfaces\IterativeGetInterface;
 use YellowCable\Collection\Traits\Locators\FirstIdentifierMatchTrait;
 use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 
+/**
+ * @template Item
+ * @template Collection
+ */
 trait AggregationStaticTrait
 {
-    /** @var CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface $aggregations */
+    /** @var CollectionInterface<AggregationInterface> & FirstIdentifierMatchInterface & IterativeGetInterface $aggregations */
     private static CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface $aggregations;
 
     /**
      * Get an array of all Aggregations registered in the static list.
      *
-     * @return CollectionInterface
+     * @return IterativeGetInterface&FirstIdentifierMatchInterface&CollectionInterface<AggregationInterface>
      */
     public static function registry(): CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface
     {
@@ -46,19 +51,15 @@ trait AggregationStaticTrait
     }
 
     /**
-     * Aggregate a Collection.
+     * @inheritDoc
      *
-     * @param CollectionInterface $collection
-     * @param bool                $preventDuplicates
-     * @return AggregationInterface
+     * @return AggregationInterface<Item, Collection>&AggregationStaticInterface<Item, Collection>
      * @throws DoesNotExistException
-     * @throws EmptyException
-     * @throws NotImplementedException
      */
     public static function aggregate(
         CollectionInterface $collection,
         bool $preventDuplicates = true
-    ): AggregationInterface {
+    ): AggregationInterface&AggregationStaticInterface {
         try {
             self::get($collection->getIdentifier())
                 ?? throw new DoesNotExistException();
@@ -74,30 +75,20 @@ trait AggregationStaticTrait
     }
 
     /**
-     * Get an Aggregation based on the identifier. The identifier may have been set
-     * by retrieving it from the initial aggregated Collection.
-     *
-     * @param string $identifier
-     *
-     * @return AggregationInterface
+     * @inheritDoc
+     * @return AggregationInterface<Item, Collection>
      * @throws DoesNotExistException
-     * @throws EmptyException
-     * @throws NotImplementedException
      */
     public static function get(string $identifier): AggregationInterface
     {
-        try {
-            return self::registry()->getFirstIdentifierMatch($identifier) ?? throw new DoesNotExistException();
-        } catch (EmptyException) {
-            throw new DoesNotExistException("Aggregation does not exist!");
-        }
+        return self::registry()->getFirstIdentifierMatch($identifier) ?? throw new DoesNotExistException();
     }
 
     /**
      * Register an Aggregation in the static list.
      *
-     * @param AggregationInterface $aggregation
-     * @return AggregationInterface
+     * @param AggregationInterface<Item, Collection> $aggregation
+     * @return AggregationInterface<Item, Collection>
      */
     protected static function set(AggregationInterface $aggregation): AggregationInterface
     {
@@ -105,9 +96,7 @@ trait AggregationStaticTrait
     }
 
     /**
-     * Remove an aggregation from the register.
-     *
-     * @param string $identifier
+     * @inheritDoc
      * @return bool
      */
     public static function remove(string $identifier): bool

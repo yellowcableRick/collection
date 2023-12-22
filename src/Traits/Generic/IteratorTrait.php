@@ -2,6 +2,9 @@
 
 namespace YellowCable\Collection\Traits\Generic;
 
+/**
+ * @template Item
+ */
 trait IteratorTrait
 {
     /** @var int $index Iterator index which holds the current iteration key */
@@ -9,6 +12,7 @@ trait IteratorTrait
 
     /**
      * @inheritDoc
+     * @return Item
      */
     public function current(): mixed
     {

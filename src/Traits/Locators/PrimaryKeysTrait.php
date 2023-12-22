@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Datastore;
+namespace YellowCable\Collection\Traits\Locators;
 
 /**
  * PrimaryKeyTrait is used for Iterable classes where the items in the collection
@@ -16,7 +16,7 @@ trait PrimaryKeysTrait
      *
      * @var array<string, string|int[]> $primaryKeyValues
      */
-    public ?array $primaryKeyValues = null;
+    private ?array $primaryKeyValues = null;
 
     /**
      * Because we don't know what the primary key property/field will be, the
@@ -24,7 +24,7 @@ trait PrimaryKeysTrait
      *
      * @return string
      */
-    abstract public function getPrimaryKey(): string;
+    abstract public function declaredPrimaryKey(): string;
 
     /**
      * Iterates all items and creates an array with classnames as keys, and nested arrays with the primary keys.
@@ -33,7 +33,7 @@ trait PrimaryKeysTrait
      */
     public function getPrimaryKeyValues(): array
     {
-        if (!$this->primaryKeyValues) {
+        if (!$this->primaryKeyValues || $this->count() !== array_sum(array_map("count", $this->primaryKeyValues))) {
             $primaryKeys = [];
 
             foreach ($this as $key => $item) {
@@ -42,7 +42,7 @@ trait PrimaryKeysTrait
                         $primaryKeys[$item::class] = [];
                     }
 
-                    $primaryKey = $this->getPrimaryKey();
+                    $primaryKey = $this->declaredPrimaryKey();
                     if (method_exists($item, $primaryKey)) {
                         $primaryKeys[$item::class][$key] = $item->$primaryKey();
                     } elseif (method_exists($item, "get" . ucfirst($primaryKey))) {
@@ -94,7 +94,7 @@ trait PrimaryKeysTrait
 
     public function getCollectionKey(object $target): int|string|null
     {
-        $primaryKey = $this->getPrimaryKey();
+        $primaryKey = $this->declaredPrimaryKey();
         if (method_exists($target, $primaryKey)) {
             $targetKey = $target->$primaryKey();
             foreach ($this as $key => $item) {

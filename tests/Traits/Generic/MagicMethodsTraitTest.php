@@ -2,7 +2,7 @@
 
 namespace YellowCable\Collection\Tests\Traits\Generic;
 
-use YellowCable\Collection\Tests\Example\ItemCollection;
+use YellowCable\Collection\Tests\Example\Item\ItemCollection;
 use YellowCable\Collection\Tests\Test;
 
 class MagicMethodsTraitTest extends Test

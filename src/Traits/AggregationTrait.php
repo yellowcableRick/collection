@@ -9,18 +9,15 @@ use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 
+/**
+ * @template Item
+ * @template Collection
+ */
 trait AggregationTrait
 {
     /**
-     * Add a collection to this Aggregation. If you choose to prevent duplications in
-     * the aggregated Collections, it will compare the new primary keys with the
-     * primary keys already present in the aggregation. You can only prevent duplication
-     * if the Collections use the PrimaryKeyTrait, which defines the unique property
-     * between the collected Items.
-     *
-     * @param CollectionInterface $collection
-     * @param bool                $preventDuplicates
-     * @return AggregationInterface
+     * @inheritDoc
+     * @return AggregationInterface<Item, Collection>
      * @throws DuplicateItemException
      * @throws NotImplementedException
      * @throws ValidationException
@@ -59,7 +56,7 @@ trait AggregationTrait
     }
 
     /**
-     * Remove this aggregation from the registry.
+     * @inheritDoc
      *
      * @return bool
      */

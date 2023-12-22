@@ -1,11 +1,11 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Generic;
+namespace YellowCable\Collection\Tests\Traits\Locators;
 
+use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\ItemCollection;
-use PHPUnit\Framework\TestCase;
+use YellowCable\Collection\Tests\Example\Item\ItemCollection;
 
 class FirstTraitTest extends TestCase
 {

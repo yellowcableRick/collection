@@ -36,7 +36,7 @@ trait DataProviderTrait
     /**
      * @inheritDoc
      */
-    abstract public function getPrimaryKey(): string;
+    abstract public function declaredPrimaryKey(): string;
 
     /**
      * @inheritDoc
@@ -113,7 +113,7 @@ trait DataProviderTrait
     public function runUpdateProvider(mixed ...$args): static
     {
         $changes = 0;
-        if (method_exists($this, "getPrimaryKey")) {
+        if (method_exists($this, "declaredPrimaryKey")) {
             foreach ($this->updateProvider->getClosure()(...$args) as $item) {
                 $this->offsetSet($this->getCollectionKey($item), $item);
             }

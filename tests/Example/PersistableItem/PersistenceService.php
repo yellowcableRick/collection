@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Example;
+namespace YellowCable\Collection\Tests\Example\PersistableItem;
 
 use Exception;
 use Throwable;

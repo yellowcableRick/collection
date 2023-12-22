@@ -9,9 +9,10 @@ use JsonSerializable;
 use SeekableIterator;
 
 /**
- * @extends ArrayAccess<int, object>
- * @extends Iterator<int, object>
- * @extends SeekableIterator<int, object>
+ * @template Item
+ * @extends ArrayAccess<int, Item>
+ * @extends Iterator<int, Item>
+ * @extends SeekableIterator<int, Item>
  */
 interface CollectionInterface extends
     ArrayAccess,
@@ -23,12 +24,29 @@ interface CollectionInterface extends
     /**
      * getClass must return the class (FQN) of the allowed objects in the Collection.
      *
-     * @return string
+     * @return class-string
      */
     public function getClass(): string;
-    public function getEncapsulation(): self;
-//    public function getKey(callable $condition): ?int;
-//    public function getItem(callable $condition): mixed;
+
+    /**
+     * Return the Collection object without the items.
+     *
+     * @return CollectionInterface<Item>
+     */
+    public function getEncapsulation(): CollectionInterface;
+
+    /**
+     * Get the identifier for this collection.
+     *
+     * @return string
+     */
     public function getIdentifier(): string;
-    public function setIdentifier(string $identifier): self;
+
+    /**
+     * Set the identifier for this collection.
+     *
+     * @param string $identifier
+     * @return CollectionInterface<Item>
+     */
+    public function setIdentifier(string $identifier): CollectionInterface;
 }

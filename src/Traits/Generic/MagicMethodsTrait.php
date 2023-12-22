@@ -40,7 +40,7 @@ trait MagicMethodsTrait
      */
     public function __get(string $name)
     {
-        throw new DoesNotExistException("Property does not exist on this collection.");
+        throw new DoesNotExistException("Property \"$name\" does not exist on this collection.");
     }
 
     /**

@@ -2,8 +2,7 @@
 
 namespace YellowCable\Collection\Tests\Traits\Manipulation;
 
-use PHPUnit\Framework\IncompleteTestError;
-use YellowCable\Collection\Tests\Example\FullTraitedItemCollection;
+use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
 

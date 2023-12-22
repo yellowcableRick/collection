@@ -2,14 +2,12 @@
 
 namespace YellowCable\Collection\Tests\Traits\Coupler;
 
-use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Collection;
-use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
 use YellowCable\Collection\Traits\CollectionTrait;
 use YellowCable\Collection\Traits\Coupler\AggregationTrait;
-use YellowCable\Collection\Traits\Datastore\PrimaryKeysTrait;
+use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
 use YellowCable\Collection\Traits\Validation\HashTrait;
 
 class AggregationTraitTest extends Test
@@ -27,7 +25,7 @@ class AggregationTraitTest extends Test
                 return Item::class;
             }
 
-            public function getPrimaryKey(): string
+            public function declaredPrimaryKey(): string
             {
                 return "name";
             }
