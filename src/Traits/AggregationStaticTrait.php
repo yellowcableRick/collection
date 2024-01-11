@@ -12,6 +12,7 @@ use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Interfaces\Locators\FirstIdentifierMatchInterface;
 use YellowCable\Collection\Interfaces\Locators\IterativeGetInterface;
 use YellowCable\Collection\Traits\Locators\FirstIdentifierMatchTrait;
+use YellowCable\Collection\Traits\Locators\FirstTrait;
 use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
 
 /**
@@ -34,6 +35,7 @@ trait AggregationStaticTrait
         $bliep =
             new class () extends Collection implements FirstIdentifierMatchInterface, IterativeGetInterface
             {
+                use FirstTrait;
                 use FirstIdentifierMatchTrait;
                 use IterativeGetTrait;
 
