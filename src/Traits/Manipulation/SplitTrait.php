@@ -24,8 +24,9 @@ trait SplitTrait
                 !($sub = $collection->getItem(fn(CollectionInterface $sub) =>
                 method_exists($sub, "getSplitIdentifier") && $sub->getSplitIdentifier() === $unique))
             ) {
-                $sub = $collection[] = clone $this;
-                $sub->__construct($this->getIdentifier(), []);
+                /** @var self $sub */
+                $sub = $collection[] = $this->getEncapsulation();
+                !property_exists($sub, "fixedCount") ?: $sub->fixedCount = 0;
                 $sub->setSplitIdentifier($unique);
             }
             $sub[] = $item;
