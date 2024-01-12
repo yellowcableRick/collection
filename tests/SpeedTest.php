@@ -2,6 +2,7 @@
 
 namespace YellowCable\Collection\Tests;
 
+use DateTime;
 use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
@@ -23,7 +24,7 @@ class SpeedTest extends Test
      */
     private function build(int $start, AggregationInterface $aggregation): void
     {
-        $collection = (new FullTraitedItemCollection());
+        $collection = new FullTraitedItemCollection();
         $collection->setIdentifier("SpeedTest$start");
         $collection->rewind();
         $collection->setDataProvider(function () use ($start) {
@@ -86,5 +87,21 @@ class SpeedTest extends Test
         $this->assertEquals(($this->rounds * $this->multiplier), array_sum($aggregation->__call("count")));
         $this->assertEquals(1000000, array_sum($aggregation->getCount("counter>anything")));//@phpstan-ignore-line
         $this->assertLessThanOrEqual($time + $allowedSeconds, time(), "Time diff: " . (time() - $time));
+    }
+
+
+    public function testBigSplit(): void
+    {
+        $baseTime = microtime(true);
+        $collection = new FullTraitedItemCollection("bigSplit");
+        for ($i = 1; $i <= 1000000; $i++) {
+            $collection[] = new Item(
+                "$i",
+                rand(1, getrandmax()),
+                (int) (new DateTime())->setTimestamp(rand(time() - 31536000, time()))->format("Ymd")
+            );
+        }
+        $collection->split(fn (Item $item) => $item->anything);
+        $this->assertLessThanOrEqual(20.00, round(microtime(true) - $baseTime, 2));
     }
 }
