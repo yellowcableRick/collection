@@ -11,28 +11,25 @@ trait SplitTrait
     private string $splitIdentifier;
     public function split(callable $condition): CollectionInterface
     {
-        $collection = new class ($this->getIdentifier()) extends Collection {
+        $subs = [];
+        foreach ($this as $item) {
+            $unique = $condition($item);
+            if (!isset($subs[$unique])) {
+                /** @var self $cap */
+                $cap = $this->getEncapsulation();
+                $subs[$unique] = $cap;
+                !property_exists($subs[$unique], "fixedCount") ?: $subs[$unique]->fixedCount = 0;
+                $subs[$unique]->setSplitIdentifier($unique);
+            }
+            $subs[$unique][] = $item;
+        }
+
+        return new class ($this->getIdentifier(), $subs) extends Collection {
             public function getClass(): string
             {
                 return CollectionInterface::class;
             }
         };
-
-        foreach ($this as $item) {
-            $unique = $condition($item);
-            if (
-                !($sub = $collection->getItem(fn(CollectionInterface $sub) =>
-                method_exists($sub, "getSplitIdentifier") && $sub->getSplitIdentifier() === $unique))
-            ) {
-                /** @var self $sub */
-                $sub = $collection[] = $this->getEncapsulation();
-                !property_exists($sub, "fixedCount") ?: $sub->fixedCount = 0;
-                $sub->setSplitIdentifier($unique);
-            }
-            $sub[] = $item;
-        }
-
-        return $collection;
     }
 
     /**

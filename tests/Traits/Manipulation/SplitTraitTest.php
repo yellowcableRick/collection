@@ -2,7 +2,6 @@
 
 namespace YellowCable\Collection\Tests\Traits\Manipulation;
 
-use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Example\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
