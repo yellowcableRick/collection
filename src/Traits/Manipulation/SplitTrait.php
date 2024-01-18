@@ -14,14 +14,16 @@ trait SplitTrait
         $subs = [];
         foreach ($this as $item) {
             $unique = $condition($item);
-            if (!isset($subs[$unique])) {
-                /** @var self $cap */
-                $cap = $this->getEncapsulation();
-                $subs[$unique] = $cap;
-                !property_exists($subs[$unique], "fixedCount") ?: $subs[$unique]->fixedCount = 0;
-                $subs[$unique]->setSplitIdentifier($unique);
+            if ($unique !== null) {
+                if (!isset($subs[$unique])) {
+                    /** @var self $cap */
+                    $cap = $this->getEncapsulation();
+                    $subs[$unique] = $cap;
+                    !property_exists($subs[$unique], "fixedCount") ?: $subs[$unique]->fixedCount = 0;
+                    $subs[$unique]->setSplitIdentifier($unique);
+                }
+                $subs[$unique][] = $item;
             }
-            $subs[$unique][] = $item;
         }
 
         return new class ($this->getIdentifier(), $subs) extends Collection {
