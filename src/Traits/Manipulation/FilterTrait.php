@@ -13,6 +13,7 @@ trait FilterTrait
                 $this->offsetUnset($key);
             }
         }
+        $this->collection = array_values($this->collection);
         return $this;
     }
 }

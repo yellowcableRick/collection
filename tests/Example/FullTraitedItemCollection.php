@@ -18,7 +18,7 @@ use YellowCable\Collection\Traits\Manipulation\SortTrait;
 use YellowCable\Collection\Traits\Manipulation\SplitTrait;
 use YellowCable\Collection\Traits\Validation\HashTrait;
 
-class FullTraitedItemCollection extends Collection implements CollectionInterface
+class FullTraitedItemCollection implements CollectionInterface
 {
     use CollectionTrait;
     use CountableTrait;
