@@ -6,6 +6,7 @@ use Exception;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 use YellowCable\Collection\Collection;
+use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 
 /**
@@ -95,7 +96,11 @@ trait CounterTrait
      */
     public function getCount(string $name): int
     {
-        return (int) $this->getCounters()->getItem(fn($x) => $x->name === $name)->result;
+        if ($counter = $this->getCounters()->getItem(fn($x) => $x->name === $name)) {
+            return (int)$counter->result;
+        } else {
+            throw new DoesNotExistException("Counter $name does not exist!");
+        }
     }
 
     /**
