@@ -6,6 +6,8 @@ namespace YellowCable\Collection\Traits\Locators;
  * PrimaryKeyTrait is used for Iterable classes where the items in the collection
  * have a primary key and are identifiable by it. The trait only enabled either
  * int or string based primary keys.
+ *
+ * @template Item
  */
 trait PrimaryKeysTrait
 {
@@ -73,7 +75,12 @@ trait PrimaryKeysTrait
             in_array($primaryKey, $this->getPrimaryKeyValues()[$class]);
     }
 
-    public function getItemByPrimaryKey(int|string $primaryKey, ?string $class = ""): object|null
+    /**
+     * @param int|string  $primaryKey
+     * @param string|null $class
+     * @return Item|null
+     */
+    public function getItemByPrimaryKey(int|string $primaryKey, ?string $class = ""): mixed
     {
         if (key_exists($class, $this->getPrimaryKeyValues())) {
             foreach ($this->getPrimaryKeyValues()[$class] as $key => $primary) {
@@ -91,7 +98,6 @@ trait PrimaryKeysTrait
      * @param object $target
      * @return int|string|null
      */
-
     public function getCollectionKey(object $target): int|string|null
     {
         $primaryKey = $this->declaredPrimaryKey();

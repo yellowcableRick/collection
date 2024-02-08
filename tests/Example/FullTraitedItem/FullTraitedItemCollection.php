@@ -29,11 +29,13 @@ class FullTraitedItemCollection extends Collection
     use MaxTrait;
     use AggregationTrait;
     use PersistenceTrait;
+    /** @use PrimaryKeysTrait<Item> */
     use PrimaryKeysTrait;
     use DataProviderTrait;
     use HashTrait;
     use FilterTrait;
     use SortTrait;
+    /** @use SplitTrait<Item> */
     use SplitTrait;
     /** @use FirstTrait<Item> */
     use FirstTrait;

@@ -28,9 +28,7 @@ class SplitTraitTest extends Test
         }
         $splits = $collection->split(fn(Item $x) => (string) $x->counter);
         $this->assertEquals(3, $splits->count());
-        /** @var FullTraitedItemCollection $x */
-        $x = $splits->getItem(fn (FullTraitedItemCollection $col) => $col->getSplitIdentifier() === "2");
-        $this->assertEquals(4, $x->count());
+        $this->assertEquals(4, $splits->getItemByPrimaryKey("2", FullTraitedItemCollection::class)?->count());
     }
 
     public function testSplitNoResultInCallback(): void
@@ -53,16 +51,8 @@ class SplitTraitTest extends Test
         }
         $splits = $collection->split(fn(Item $x) => $x->anything);
         $this->assertEquals(4, $splits->count());
-        /** @var FullTraitedItemCollection $x */
-        $x = $splits->getItem(fn (FullTraitedItemCollection $col) => $col->getSplitIdentifier() === "");
-        $this->assertEquals(1, $x->count());
-
-        /** @var FullTraitedItemCollection $x */
-        $x = $splits->getItem(fn (FullTraitedItemCollection $col) => $col->getSplitIdentifier() === "1");
-        $this->assertEquals(5, $x->count());
-
-        /** @var FullTraitedItemCollection $x */
-        $x = $splits->getItem(fn (FullTraitedItemCollection $col) => $col->getSplitIdentifier() == 2);
-        $this->assertEquals(1, $x->count());
+        $this->assertEquals(1, $splits->getItemByPrimaryKey("", FullTraitedItemCollection::class)?->count());
+        $this->assertEquals(5, $splits->getItemByPrimaryKey("1", FullTraitedItemCollection::class)?->count());
+        $this->assertEquals(1, $splits->getItemByPrimaryKey("2", FullTraitedItemCollection::class)?->count());
     }
 }

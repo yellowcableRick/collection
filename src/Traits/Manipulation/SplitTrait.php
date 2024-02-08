@@ -5,11 +5,22 @@ namespace YellowCable\Collection\Traits\Manipulation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\SplitException;
 use YellowCable\Collection\Interfaces\CollectionInterface;
+use YellowCable\Collection\Interfaces\Locators\PrimaryKeysInterface;
+use YellowCable\Collection\Traits\CollectionTrait;
+use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
 
+/**
+ * @template Item
+ */
 trait SplitTrait
 {
     private string $splitIdentifier;
-    public function split(callable $condition): CollectionInterface
+
+    /**
+     * @param callable $condition
+     * @return PrimaryKeysInterface&CollectionInterface
+     */
+    public function split(callable $condition): CollectionInterface&PrimaryKeysInterface
     {
         $subs = [];
         foreach ($this as $item) {
@@ -26,12 +37,36 @@ trait SplitTrait
             }
         }
 
-        return new class ($this->getIdentifier(), $subs) extends Collection {
+        /** @var CollectionInterface&PrimaryKeysInterface $class */
+        /**
+         * @template Item
+         * @implements CollectionInterface<Item>
+         * @implements PrimaryKeysInterface<Item>
+         */
+        $class = new class ($this->getIdentifier(), $subs) implements CollectionInterface, PrimaryKeysInterface {
+            /** @use CollectionTrait<Item> */
+            use CollectionTrait;
+            /** @use PrimaryKeysTrait<Item> */
+            use PrimaryKeysTrait;
+
+            public function __construct(string $identifier, array $subs)
+            {
+                $this->setIdentifier($identifier);
+                $this->setCollection($subs);
+            }
+
             public function getClass(): string
             {
                 return CollectionInterface::class;
             }
+
+            public function declaredPrimaryKey(): string
+            {
+                return "getSplitIdentifier";
+            }
         };
+
+        return $class;
     }
 
     /**
