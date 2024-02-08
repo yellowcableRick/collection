@@ -93,7 +93,7 @@ class SpeedTest extends Test
     public function testBigSplit(): void
     {
         $baseTime = microtime(true);
-        $collection = new FullTraitedItemCollection("bigSplit");
+        $collection = new FullTraitedItemCollection();
         for ($i = 1; $i <= 1000000; $i++) {
             $collection[] = new Item(
                 "$i",

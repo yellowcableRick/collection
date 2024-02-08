@@ -11,16 +11,21 @@ class SortTraitTest extends Test
 {
     public function testUsort(): void
     {
-        $collection = new FullTraitedItemCollection("test", [
-            new Item("10", 1, 1),
-            new Item("20", 1, 1),
-            new Item("33", 1, 1),
-            new Item("46", 1, 1),
-            new Item("1", 1, 1),
-            new Item("4", 1, 1),
-            new Item("16", 1, 1),
-            new Item("2", 1, 1),
-        ]);
+        $collection = new FullTraitedItemCollection();
+        foreach (
+            [
+                new Item("10", 1, 1),
+                new Item("20", 1, 1),
+                new Item("33", 1, 1),
+                new Item("46", 1, 1),
+                new Item("1", 1, 1),
+                new Item("4", 1, 1),
+                new Item("16", 1, 1),
+                new Item("2", 1, 1),
+            ] as $item
+        ) {
+            $collection[] = $item;
+        }
 
         $collection->usort(fn(Item $x, Item $y) => $x->getName() <=> $y->getName());
         $this->assertEquals("10", $collection[3]?->getName());
@@ -38,16 +43,21 @@ class SortTraitTest extends Test
      */
     public function testUasort(): void
     {
-        $collection = new FullTraitedItemCollection("test", [
-            new Item("10", 1, 1),
-            new Item("20", 1, 1),
-            new Item("33", 1, 1),
-            new Item("46", 1, 1),
-            new Item("1", 1, 1),
-            new Item("4", 1, 1),
-            new Item("16", 1, 1),
-            new Item("2", 1, 1),
-        ]);
+        $collection = new FullTraitedItemCollection();
+        foreach (
+            [
+                new Item("10", 1, 1),
+                new Item("20", 1, 1),
+                new Item("33", 1, 1),
+                new Item("46", 1, 1),
+                new Item("1", 1, 1),
+                new Item("4", 1, 1),
+                new Item("16", 1, 1),
+                new Item("2", 1, 1),
+            ] as $item
+        ) {
+            $collection[] = $item;
+        }
 
         $collection->uasort(fn(Item $x, Item $y) => $x->getName() <=> $y->getName());
         $this->assertEquals("46", $collection[3]?->getName());

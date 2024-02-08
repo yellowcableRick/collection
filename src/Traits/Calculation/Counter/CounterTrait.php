@@ -5,7 +5,6 @@ namespace YellowCable\Collection\Traits\Calculation\Counter;
 use Exception;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
-use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 
@@ -24,7 +23,7 @@ trait CounterTrait
     /**
      * Contains the registered counters.
      *
-     * @var Collection
+     * @var CounterCollection
      */
     private CounterCollection $counters;
 
@@ -53,12 +52,15 @@ trait CounterTrait
     }
 
     /**
-     * Execute all registered counters.
+     * Execute all registered counters. Will zero out all counters before running.
      *
-     * @return $this
+     * @return static
      */
     public function executeCount(): static
     {
+        foreach ($this->getCounters() as $counter) {
+            $counter->result = 0;
+        }
         foreach ($this as $item) {
             foreach ($this->getCounters() as $counter) {
                 !$counter->closure->getClosure()($item) ?: $counter->result++;
@@ -68,11 +70,20 @@ trait CounterTrait
     }
 
     /**
-     * @throws NotImplementedException
+     * Updates all registered counters. Will NOT zero out all counters before running.
+     * May be interesting to use after aggregation and collecting new items, to append
+     * the counters with the new values.
+     *
+     * @returns static
      */
     public function updateCount(): static
     {
-        throw new NotImplementedException();
+        foreach ($this as $item) {
+            foreach ($this->getCounters() as $counter) {
+                !$counter->closure->getClosure()($item) ?: $counter->result++;
+            }
+        }
+        return $this;
     }
 
     /**
