@@ -17,6 +17,7 @@ trait AggregationTrait
 {
     /**
      * @inheritDoc
+     * @TODO: Duplication check is rather expensive, and might be subject to refactoring
      * @return AggregationInterface<Item, Collection>
      * @throws DuplicateItemException
      * @throws NotImplementedException

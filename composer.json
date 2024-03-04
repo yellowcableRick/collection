@@ -1,6 +1,7 @@
 {
   "name": "yellowcable/collection",
   "description": "Collection and Aggregation.",
+  "minimum-stability": "stable",
   "homepage": "https://yellowcable.nl",
   "version": "2.0.0",
   "type": "library",

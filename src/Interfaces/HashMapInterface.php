@@ -2,6 +2,10 @@
 
 namespace YellowCable\Collection\Interfaces;
 
-interface HashMapInterface
+/**
+ * @template Item
+ * @extends CollectionInterface<Item>
+ */
+interface HashMapInterface extends CollectionInterface
 {
 }

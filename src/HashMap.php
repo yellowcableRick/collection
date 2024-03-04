@@ -5,7 +5,11 @@ namespace YellowCable\Collection;
 use YellowCable\Collection\Interfaces\HashMapInterface;
 use YellowCable\Collection\Traits\HashMapTrait;
 
-abstract class HashMap implements HashMapInterface
+/**
+ * @template Item
+ * @extends Collection<Item>
+ */
+abstract class HashMap extends Collection implements HashMapInterface
 {
     use HashMapTrait;
 }

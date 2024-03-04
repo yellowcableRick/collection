@@ -29,12 +29,15 @@ class FullTraitedItemAggregation extends Aggregation
     use CounterTrait;
     use MaxTrait;
     use PersistenceTrait;
+    /** @use PrimaryKeysTrait<Item> */
     use PrimaryKeysTrait;
     use DataProviderTrait;
     use HashTrait;
     use FilterTrait;
     use SortTrait;
+    /** @use SplitTrait<Item> */
     use SplitTrait;
+    /** @use FirstTrait<Item> */
     use FirstTrait;
     use IterativeGetTrait;
     use FirstIdentifierMatchTrait;

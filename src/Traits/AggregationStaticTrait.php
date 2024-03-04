@@ -32,21 +32,20 @@ trait AggregationStaticTrait
     public static function registry(): CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface
     {
         /** @var CollectionInterface & FirstIdentifierMatchInterface & IterativeGetInterface $bliep */
-        $bliep =
-            new class () extends Collection implements FirstIdentifierMatchInterface, IterativeGetInterface
-            {
-                use FirstTrait;
-                use FirstIdentifierMatchTrait;
-                use IterativeGetTrait;
+        $bliep = new class () extends Collection implements FirstIdentifierMatchInterface, IterativeGetInterface
+        {
+            use FirstTrait;
+            use FirstIdentifierMatchTrait;
+            use IterativeGetTrait;
 
-                /**
-                 * @inheritDoc
-                 */
-                public function getClass(): string
-                {
-                    return AggregationInterface::class;
-                }
-            };
+            /**
+             * @inheritDoc
+             */
+            public function getClass(): string
+            {
+                return AggregationInterface::class;
+            }
+        };
 
         return self::$aggregations ?? self::$aggregations = $bliep;
     }
@@ -72,15 +71,17 @@ trait AggregationStaticTrait
                 }
             });
         }
-        return self::get($collection->getIdentifier())->addCollection($collection, $preventDuplicates);
+        $staticAggregation = self::get($collection->getIdentifier());
+        $staticAggregation->addCollection($collection, $preventDuplicates);
+        return $staticAggregation;
     }
 
     /**
      * @inheritDoc
-     * @return AggregationInterface<Item, Collection>
+     * @return AggregationInterface<Item, Collection> & AggregationStaticInterface<Item, Collection>
      * @throws DoesNotExistException
      */
-    public static function get(string $identifier): AggregationInterface
+    public static function get(string $identifier): AggregationInterface & AggregationStaticInterface
     {
         return self::registry()->getFirstIdentifierMatch($identifier) ?? throw new DoesNotExistException();
     }

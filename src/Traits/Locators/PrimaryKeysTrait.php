@@ -29,6 +29,25 @@ trait PrimaryKeysTrait
     abstract public function declaredPrimaryKey(): string;
 
     /**
+     * @param Item $item
+     * @return int|string|null
+     */
+    public function getPrimaryKeyValue(mixed $item): int|string|null
+    {
+        $primaryKey = $this->declaredPrimaryKey();
+        if (method_exists($item, $primaryKey)) {
+            return $item->$primaryKey();
+        } elseif (method_exists($item, "get" . ucfirst($primaryKey))) {
+            $keyGetter = "get" . ucfirst($primaryKey);
+            return $item->$keyGetter();
+        } elseif (property_exists($item, $primaryKey)) {
+            return $item->$primaryKey;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Iterates all items and creates an array with classnames as keys, and nested arrays with the primary keys.
      *
      * @return array<string, string|int[]>
@@ -44,14 +63,8 @@ trait PrimaryKeysTrait
                         $primaryKeys[$item::class] = [];
                     }
 
-                    $primaryKey = $this->declaredPrimaryKey();
-                    if (method_exists($item, $primaryKey)) {
-                        $primaryKeys[$item::class][$key] = $item->$primaryKey();
-                    } elseif (method_exists($item, "get" . ucfirst($primaryKey))) {
-                        $keyGetter = "get" . ucfirst($primaryKey);
-                        $primaryKeys[$item::class][$key] = $item->$keyGetter();
-                    } elseif (property_exists($item, $primaryKey)) {
-                        $primaryKeys[$item::class][$key] = $item->$primaryKey;
+                    if (!is_null($pkv = $this->getPrimaryKeyValue($item))) {
+                        $primaryKeys[$item::class][$key] = $pkv;
                     }
                 }
             }
@@ -95,11 +108,20 @@ trait PrimaryKeysTrait
     /**
      * Check what the key of the collection is for a certain item. Returns null if the object isn't found.
      *
-     * @param object $target
+     * @param Item $target
      * @return int|string|null
      */
-    public function getCollectionKey(object $target): int|string|null
+    public function getCollectionKey(mixed $target): int|string|null
     {
+        if ($pkvs = $this->getPrimaryKeyValues()) {
+            $pkv = $this->getPrimaryKeyValue($target);
+            foreach ($pkvs[$target::class] as $key => $value) {
+                if ($value === $pkv) {
+                    return $key;
+                }
+            }
+        }
+
         $primaryKey = $this->declaredPrimaryKey();
         if (method_exists($target, $primaryKey)) {
             $targetKey = $target->$primaryKey();

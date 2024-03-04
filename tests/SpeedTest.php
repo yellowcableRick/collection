@@ -3,6 +3,7 @@
 namespace YellowCable\Collection\Tests;
 
 use DateTime;
+use Exception;
 use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
@@ -15,21 +16,21 @@ use YellowCable\Collection\Tests\Example\PersistableItem\PersistenceService;
 
 class SpeedTest extends Test
 {
-    private int $multiplier = 100000;
-    private int $rounds = 10;
-
     /**
-     * @throws FailedInheritanceException
+     * @param int                                                   $start
+     * @param AggregationInterface<Item, FullTraitedItemCollection> $aggregation
+     * @param int                                                   $amountOfItems
+     * @return void
      * @throws PhpVersionNotSupportedException
      */
-    private function build(int $start, AggregationInterface $aggregation): void
+    private function build(int $start, AggregationInterface $aggregation, int $amountOfItems): void
     {
         $collection = new FullTraitedItemCollection();
         $collection->setIdentifier("SpeedTest$start");
         $collection->rewind();
-        $collection->setDataProvider(function () use ($start) {
+        $collection->setDataProvider(function () use ($start, $amountOfItems) {
             $set = [];
-            for ($i = $start; $i < $start + $this->multiplier; $i++) {
+            for ($i = $start; $i < $start + $amountOfItems; $i++) {
                 $set[] = new Item("$i", $i, $i % 19 * 33 / 90);
             }
             return $set;
@@ -37,56 +38,165 @@ class SpeedTest extends Test
         $collection->registerCounter("counter>anything", fn(Item $x) => $x->counter > $x->anything);
         $collection->runDataProvider();
         $collection->executeCount();
-        $collection->setUpdateProvider(function () use ($start) {
+        $collection->setUpdateProvider(function () use ($start, $amountOfItems) {
             $set = [];
-            for ($i = $start; $i < $start + $this->multiplier; $i += ($this->multiplier / 100)) {
+            for ($i = $start; $i < $start + $amountOfItems; $i += 1000) {
                 $set[] = new Item("$i", $i, 3000000);
             }
             return $set;
         });
-        $aggregation->addCollection($collection);
+        $aggregation->addCollection($collection, false);
     }
 
     /**
-     * @throws DoesNotExistException
+     * @dataProvider dataProvider
+     *
+     * @param int   $amountOfItems
+     * @param int   $amountOfCollections
+     * @param int   $amountPerSecond
+     * @param float $totalAllowedTime
+     * @return void
+     * @throws FailedInheritanceException
      * @throws NotImplementedException
      * @throws PhpVersionNotSupportedException
-     * @throws FailedInheritanceException
-     * @throws \Exception
      */
-    public function testSpeed(): void
-    {
-        $time = time();
+    public function testSpeed(
+        int $amountOfItems,
+        int $amountOfCollections,
+        int $amountPerSecond,
+        float $totalAllowedTime
+    ): void {
+        $totalTime = microtime(true);
+        // Initial setup
+        $secForLongActions = ceil($amountOfItems * $amountOfCollections / $amountPerSecond);
+        $secForShortActions = ceil($amountOfItems * $amountOfCollections / $amountPerSecond / 10);
+
+        $time = microtime(true);
         $aggregation = new FullTraitedItemAggregation();
         $aggregation->setIdentifier("SpeedTest");
-        for ($i = 1; $i <= $this->rounds; $i++) {
-            $this->build($i * $this->multiplier, $aggregation);
+        for ($i = 1; $i <= $amountOfCollections; $i++) {
+            $this->build($i * $amountOfItems, $aggregation, $amountOfItems);
         }
+
+        $this->assertLessThanOrEqual(
+            $secForLongActions,
+            max(1.0, round(microtime(true) - $time, 2)),
+            "time to create items and collections and aggregate: " . round((microtime(true) - $time), 2)
+        );
+        $time = microtime(true);
+
         $aggregation::$persistenceService = new PersistenceService();
         $aggregation->persist();
 
-        $this->assertions($aggregation, $time, 30);
+        $this->assertLessThanOrEqual(
+            $secForLongActions,
+            max(1.0, round(microtime(true) - $time, 2)),
+            "time to persist: " . round(round((microtime(true) - $time), 2), 2)
+        );
+        $time = microtime(true);
 
-        $secondTime = time();
+        $this->assertEquals($amountOfCollections, $aggregation->count());
+        $this->assertEquals(
+            ($amountOfCollections * $amountOfItems),
+            $amount = array_sum($aggregation->__call("count")),
+            "amount of items to process: $amount"
+        );
+        $this->assertEquals(
+            ($amountOfCollections * $amountOfItems),
+            $amount = array_sum($aggregation->__call("getCount", ["counter>anything"])),
+            "amount of items where counter is bigger than anything: $amount"
+        );
+
+        $this->assertLessThanOrEqual(
+            $secForLongActions,
+            max(1.0, round(microtime(true) - $time, 2)),
+            "time to handle initial setup: " . round((microtime(true) - $time), 2)
+        );
+
+        // Time to retrieve from persistence and handle the aggregation.
+        $time = microtime(true);
         $secondAggregation = new FullTraitedItemAggregation();
         $secondAggregation->setIdentifier("SpeedTest");
         $secondAggregation::$persistenceService = new PersistenceService();
         $secondAggregation->hydrate();
+
+        $this->assertLessThanOrEqual(
+            $secForShortActions,
+            max(1.0, round(microtime(true) - $time, 2)),
+            "time to rehydrate from persistence: " . round((microtime(true) - $time), 2)
+        );
+
+        $time = microtime(true);
         foreach ($secondAggregation as $col) {
             $col->runUpdateProvider();
-            $col->registerCounter("anything=3000000", fn (Item $x) => $x->anything === 3000000);
-            $col->executeCount(); //@TODO: Should be updateCount();
         }
 
-        $this->assertions($secondAggregation, $secondTime, 1);
+        $this->assertLessThanOrEqual(
+            $secForLongActions,
+            max(1.0, round(microtime(true) - $time, 2)),
+            "time to run the update provider: " . round((microtime(true) - $time), 2)
+        );
+
+        $time = microtime(true);
+        foreach ($secondAggregation as $col) {
+            $col->registerCounter("anything=3000000", fn (Item $x) => $x->anything === 3000000);
+            $col->updateCount();
+        }
+
+        $this->assertLessThanOrEqual(
+            $secForShortActions,
+            max(1.0, round(microtime(true) - $time, 2)),
+            "time to register an extra counter and run an update for counters: " . round((microtime(true) - $time), 2)
+        );
+
+        $time = microtime(true);
+
+        $this->assertEquals(
+            $amountOfCollections,
+            $amount = $aggregation->count(),
+            "amount of collections retrieved: $amount"
+        );
+        $this->assertEquals(
+            ($amountOfCollections * $amountOfItems),
+            $amount = array_sum($secondAggregation->__call("count")),
+            "amount of items retrieved (not really, it's aggregated data): $amount"
+        );
+        $this->assertEquals(
+            ceil(($amountOfCollections * $amountOfItems) / 1000),
+            $amount = round(array_sum($secondAggregation->__call("getCount", ["anything=3000000"]))),
+            "amount of items which have the value anything set to 3000000 by the update provider: $amount"
+        );
+        $this->assertLessThanOrEqual(
+            $secForShortActions,
+            max(1.0, round(microtime(true) - $time, 2)),
+            "time to get the new counter: " . round((microtime(true) - $time), 2)
+        );
+
+        $this->assertLessThanOrEqual(
+            $totalAllowedTime,
+            round(microtime(true) - $totalTime, 2),
+            "Total time for run: " . (microtime(true) - $totalTime)
+        );
     }
 
-    public function assertions(FullTraitedItemAggregation $aggregation, int $time, int $allowedSeconds): void
+    /**
+     * @return array<int, array<int|float>>
+     */
+    public static function dataProvider(): array
     {
-        $this->assertEquals($this->rounds, $aggregation->count());
-        $this->assertEquals(($this->rounds * $this->multiplier), array_sum($aggregation->__call("count")));
-        $this->assertEquals(1000000, array_sum($aggregation->getCount("counter>anything")));//@phpstan-ignore-line
-        $this->assertLessThanOrEqual($time + $allowedSeconds, time(), "Time diff: " . (time() - $time));
+        return [
+            [1000, 10, 27000, 0.3],
+            [1, 1, 27000, 0.01],
+            [10, 1, 27000, 0.01],
+            [100, 1, 27000, 0.01],
+            [1000, 1, 27000, 0.03],
+            [10000, 1, 27000, 0.2],
+            [100000, 1, 27000, 1.5],
+            [1000000, 1, 27000, 22],
+            [1000, 10, 27000, 0.3],
+            [10000, 10, 27000, 1.5],
+            [10000, 100, 27000, 15],
+        ];
     }
 
 

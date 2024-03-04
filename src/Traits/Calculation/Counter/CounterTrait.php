@@ -61,7 +61,7 @@ trait CounterTrait
         foreach ($this->getCounters() as $counter) {
             $counter->result = 0;
         }
-        foreach ($this as $item) {
+        foreach ($this->generator() as $item) {
             foreach ($this->getCounters() as $counter) {
                 !$counter->closure->getClosure()($item) ?: $counter->result++;
             }
@@ -78,7 +78,7 @@ trait CounterTrait
      */
     public function updateCount(): static
     {
-        foreach ($this as $item) {
+        foreach ($this->generator() as $item) {
             foreach ($this->getCounters() as $counter) {
                 !$counter->closure->getClosure()($item) ?: $counter->result++;
             }
