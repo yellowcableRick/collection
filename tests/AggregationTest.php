@@ -12,6 +12,7 @@ use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Example\Item\ItemAggregation;
 use YellowCable\Collection\Tests\Example\Item\ItemCollection;
+use YellowCable\Collection\Traits\AggregationRegistry;
 
 class AggregationTest extends Test
 {
@@ -26,16 +27,16 @@ class AggregationTest extends Test
         $col = new ItemCollection("test", [new Item("test", 1, 1)]);
         Aggregation::aggregate($col, false);
         $this->assertEquals(
-            Aggregation::get("test")[0],
+            AggregationRegistry::get("test")[0],
             $col->getEncapsulation()
         );
         $this->assertEquals(
-            Aggregation::registry()->getFirstIdentifierMatch("test")[0],
+            AggregationRegistry::registry()->getFirstIdentifierMatch("test")[0],
             $col->getEncapsulation()
         );
-        $this->assertTrue(Aggregation::remove("test"));
+        $this->assertTrue(AggregationRegistry::remove("test"));
         $this->expectException(EmptyException::class);
-        Aggregation::get("test");
+        AggregationRegistry::get("test");
     }
 
     /**

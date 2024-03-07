@@ -4,21 +4,19 @@ namespace YellowCable\Collection\Tests\Example\FullTraitedItem;
 
 use YellowCable\Collection\Aggregation;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Traits\Calculation\Counter\CounterTrait;
-use YellowCable\Collection\Traits\Calculation\MaxTrait;
-use YellowCable\Collection\Traits\Coupler\AggregationTrait;
-use YellowCable\Collection\Traits\Datastore\DataProviderTrait;
-use YellowCable\Collection\Traits\Datastore\PersistenceTrait;
+use YellowCable\Collection\Traits\Addons\Calculation\Counter\CounterTrait;
+use YellowCable\Collection\Traits\Addons\Calculation\MaxTrait;
+use YellowCable\Collection\Traits\Addons\Datastore\DataProviderTrait;
+use YellowCable\Collection\Traits\Addons\Datastore\PersistenceTrait;
+use YellowCable\Collection\Traits\Addons\Locators\FirstIdentifierMatchTrait;
+use YellowCable\Collection\Traits\Addons\Locators\FirstTrait;
+use YellowCable\Collection\Traits\Addons\Locators\IterativeGetTrait;
+use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
+use YellowCable\Collection\Traits\Addons\Manipulation\FilterTrait;
+use YellowCable\Collection\Traits\Addons\Manipulation\SortTrait;
+use YellowCable\Collection\Traits\Addons\Manipulation\SplitTrait;
+use YellowCable\Collection\Traits\Addons\Validation\HashTrait;
 use YellowCable\Collection\Traits\Generic\CountableTrait;
-use YellowCable\Collection\Traits\Generic\GeneratorTrait;
-use YellowCable\Collection\Traits\Locators\FirstIdentifierMatchTrait;
-use YellowCable\Collection\Traits\Locators\FirstTrait;
-use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
-use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
-use YellowCable\Collection\Traits\Manipulation\FilterTrait;
-use YellowCable\Collection\Traits\Manipulation\SortTrait;
-use YellowCable\Collection\Traits\Manipulation\SplitTrait;
-use YellowCable\Collection\Traits\Validation\HashTrait;
 
 /**
  * @extends Aggregation<Item, FullTraitedItemCollection>

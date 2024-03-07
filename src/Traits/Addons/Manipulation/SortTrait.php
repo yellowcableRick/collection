@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Manipulation;
+namespace YellowCable\Collection\Traits\Addons\Manipulation;
 
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Interfaces\CollectionInterface;

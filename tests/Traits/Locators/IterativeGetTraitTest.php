@@ -5,7 +5,7 @@ namespace YellowCable\Collection\Tests\Traits\Locators;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Example\Item\ItemCollection;
 use YellowCable\Collection\Tests\Test;
-use YellowCable\Collection\Traits\Locators\IterativeGetTrait;
+use YellowCable\Collection\Traits\Addons\Locators\IterativeGetTrait;
 
 class IterativeGetTraitTest extends Test
 {

@@ -5,7 +5,7 @@ namespace YellowCable\Collection\Tests\Traits\Calculation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
-use YellowCable\Collection\Traits\Calculation\MaxTrait;
+use YellowCable\Collection\Traits\Addons\Calculation\MaxTrait;
 
 class MaxTraitTest extends Test
 {

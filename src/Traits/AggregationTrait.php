@@ -2,6 +2,7 @@
 
 namespace YellowCable\Collection\Traits;
 
+use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
@@ -11,14 +12,13 @@ use YellowCable\Collection\Interfaces\CollectionInterface;
 
 /**
  * @template Item
- * @template Collection
  */
 trait AggregationTrait
 {
     /**
      * @inheritDoc
      * @TODO: Duplication check is rather expensive, and might be subject to refactoring
-     * @return AggregationInterface<Item, Collection>
+     * @return AggregationInterface<Item>
      * @throws DuplicateItemException
      * @throws NotImplementedException
      * @throws ValidationException
@@ -51,8 +51,9 @@ trait AggregationTrait
                 throw new ValidationException("Preconditions for validation failed.");
             }
         }
-
-        $this->offsetSet(null, $collection->getEncapsulation());
+        /** @var Item $encapsulation */
+        $encapsulation = $collection->getEncapsulation();
+        $this->offsetSet(null, $encapsulation);
         return $this;
     }
 
@@ -63,6 +64,6 @@ trait AggregationTrait
      */
     public function delete(): bool
     {
-        return static::remove($this->getIdentifier());
+        return AggregationRegistry::remove($this->getIdentifier());
     }
 }

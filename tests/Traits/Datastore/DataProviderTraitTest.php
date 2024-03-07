@@ -6,8 +6,8 @@ use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\UnequalCountException;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
-use YellowCable\Collection\Traits\Datastore\DataProviderTrait;
-use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
+use YellowCable\Collection\Traits\Addons\Datastore\DataProviderTrait;
+use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
 
 class DataProviderTraitTest extends Test
 {
@@ -16,6 +16,7 @@ class DataProviderTraitTest extends Test
         $subject = new class () extends Collection
         {
             use DataProviderTrait;
+            /** @use PrimaryKeysTrait<Item> */
             use PrimaryKeysTrait;
 
             public function getClass(): string

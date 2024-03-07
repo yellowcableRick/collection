@@ -1,12 +1,11 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Calculation\Counter;
+namespace YellowCable\Collection\Traits\Addons\Calculation\Counter;
 
 use Exception;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
-use YellowCable\Collection\Exceptions\NotImplementedException;
 
 /**
  * CounterTrait gives the possibility to build conditional counters for
@@ -23,13 +22,13 @@ trait CounterTrait
     /**
      * Contains the registered counters.
      *
-     * @var CounterCollection
+     * @var Counters
      */
-    private CounterCollection $counters;
+    private Counters $counters;
 
     private function getCounters(): object
     {
-        return $this->counters ?? $this->counters = new CounterCollection();
+        return $this->counters ?? $this->counters = new Counters();
     }
 
     private function createCounter(string $name, UnsignedSerializableClosure $closure): object

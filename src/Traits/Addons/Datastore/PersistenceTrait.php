@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Datastore;
+namespace YellowCable\Collection\Traits\Addons\Datastore;
 
 use Exception;
 use Throwable;

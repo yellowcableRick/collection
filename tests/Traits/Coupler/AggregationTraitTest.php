@@ -5,10 +5,8 @@ namespace YellowCable\Collection\Tests\Traits\Coupler;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
-use YellowCable\Collection\Traits\CollectionTrait;
+use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
 use YellowCable\Collection\Traits\Coupler\AggregationTrait;
-use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
-use YellowCable\Collection\Traits\Validation\HashTrait;
 
 class AggregationTraitTest extends Test
 {
@@ -17,8 +15,8 @@ class AggregationTraitTest extends Test
         $collection = new class () extends Collection
         {
             use AggregationTrait;
+            /** @use PrimaryKeysTrait<Item> */
             use PrimaryKeysTrait;
-            use HashTrait;
 
             public function getClass(): string
             {
@@ -39,11 +37,10 @@ class AggregationTraitTest extends Test
             $aggregation,
             $collection->getAggregation()
         );
-        /** @var CollectionTrait&HashTrait $cap */
-        $cap = $collection->getEncapsulation();
+
         $this->assertEquals(
-            $cap->getHash(),
-            $aggregation[0]?->getHash()
+            $collection->getEncapsulation(),
+            $aggregation[0]
         );
         $this->assertEquals(
             $collection->getPrimaryKeyValues(),

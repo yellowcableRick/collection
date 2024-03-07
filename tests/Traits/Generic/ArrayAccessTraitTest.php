@@ -17,15 +17,15 @@ class ArrayAccessTraitTest extends Test
         $collection = new ItemCollection();
 
         $collection[1] = $item1;
-        $this->assertTrue($collection[1]->getName() === $item1->getName());
+        $this->assertTrue($collection[1]?->getName() === $item1->getName());
         $this->assertTrue($collection->offsetExists(1));
 
         $collection->offsetSet(2, $item2);
-        $this->assertTrue($collection[2]->getName() === $item2->getName());
+        $this->assertTrue($collection[2]?->getName() === $item2->getName());
         $this->assertTrue($collection->count() === 2);
 
         $collection->offsetSet(1, $item3);
-        $this->assertTrue($collection->offsetGet(1)->getName() === $item3->getName());
+        $this->assertTrue($collection->offsetGet(1)?->getName() === $item3->getName());
 
         $collection->offsetSet(null, $item4);
         $this->assertEquals($item4, $collection[3]);

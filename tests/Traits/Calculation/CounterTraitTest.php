@@ -5,7 +5,7 @@ namespace YellowCable\Collection\Tests\Traits\Calculation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
-use YellowCable\Collection\Traits\Calculation\Counter\CounterTrait;
+use YellowCable\Collection\Traits\Addons\Calculation\Counter\CounterTrait;
 
 class CounterTraitTest extends Test
 {

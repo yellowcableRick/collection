@@ -18,7 +18,7 @@ interface PrimaryKeysInterface
     /**
      * Iterates all items and creates an array with classnames as keys, and nested arrays with the primary keys.
      *
-     * @return array<string, string|int[]>
+     * @return array<class-string, array<int, string|int>>
      */
     public function getPrimaryKeyValues(): array;
 

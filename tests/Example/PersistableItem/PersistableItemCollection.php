@@ -3,7 +3,7 @@
 namespace YellowCable\Collection\Tests\Example\PersistableItem;
 
 use YellowCable\Collection\Tests\Example\Item\ItemCollection;
-use YellowCable\Collection\Traits\Datastore\PersistenceTrait;
+use YellowCable\Collection\Traits\Addons\Datastore\PersistenceTrait;
 
 class PersistableItemCollection extends ItemCollection
 {

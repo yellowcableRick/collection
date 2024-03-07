@@ -2,11 +2,14 @@
 
 namespace YellowCable\Collection;
 
+use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
 use YellowCable\Collection\Interfaces\AggregationStaticInterface;
+use YellowCable\Collection\Interfaces\CollectionInterface;
+use YellowCable\Collection\Traits\AggregationRegistry;
 use YellowCable\Collection\Traits\AggregationStaticTrait;
 use YellowCable\Collection\Traits\AggregationTrait;
-use YellowCable\Collection\Collection as AbstractCollection;
+use YellowCable\Collection\Traits\CollectionTrait;
 
 /**
  * Aggregation is used to aggregate items using Collections as containers,
@@ -20,16 +23,17 @@ use YellowCable\Collection\Collection as AbstractCollection;
  * your aggregations by setting the correct identifiers in the Collections.
  *
  * @template Item
- * @template Collection
- * @extends AbstractCollection<Collection>
- * @implements AggregationInterface<Item, Collection>
- * @implements AggregationStaticInterface<Item, Collection>
+ * @implements CollectionInterface<Item>
+ * @implements AggregationInterface<Item>
+ * @implements AggregationStaticInterface<Item>
  */
-abstract class Aggregation extends AbstractCollection implements AggregationInterface, AggregationStaticInterface
+abstract class Aggregation implements CollectionInterface, AggregationInterface, AggregationStaticInterface
 {
-    /** @use AggregationStaticTrait<Item, Collection> */
+    /** @use CollectionTrait<Item> */
+    use CollectionTrait;
+    /** @use AggregationStaticTrait<Item> */
     use AggregationStaticTrait;
-    /** @use AggregationTrait<Item, Collection> */
+    /** @use AggregationTrait<Item> */
     use AggregationTrait;
 
     /**
@@ -37,10 +41,11 @@ abstract class Aggregation extends AbstractCollection implements AggregationInte
      * be directly stored in the static property.
      *
      * @param string $identifier
+     * @throws ValidationException
      */
     public function __construct(string $identifier = "")
     {
-        parent::__construct($identifier);
-        static::set($this);
+        $this->setIdentifier($identifier);
+        AggregationRegistry::registry()::set($this);
     }
 }

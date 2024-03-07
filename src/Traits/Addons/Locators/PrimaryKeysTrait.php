@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Locators;
+namespace YellowCable\Collection\Traits\Addons\Locators;
 
 /**
  * PrimaryKeyTrait is used for Iterable classes where the items in the collection
@@ -16,7 +16,7 @@ trait PrimaryKeysTrait
      * and an array as value containing the primary keys for the collection. The
      * array for the keys must be an array, not hashmap. (use consecutive int as keys)
      *
-     * @var array<string, string|int[]> $primaryKeyValues
+     * @var array<class-string, array<int, string|int>> $primaryKeyValues
      */
     private ?array $primaryKeyValues = null;
 
@@ -50,29 +50,25 @@ trait PrimaryKeysTrait
     /**
      * Iterates all items and creates an array with classnames as keys, and nested arrays with the primary keys.
      *
-     * @return array<string, string|int[]>
+     * @return array<class-string, array<int, string|int>>
      */
     public function getPrimaryKeyValues(): array
     {
         if (!$this->primaryKeyValues || $this->count() !== array_sum(array_map("count", $this->primaryKeyValues))) {
-            $primaryKeys = [];
-
+            $this->primaryKeyValues = [];
             foreach ($this as $key => $item) {
                 if (is_object($item)) {
-                    if (!isset($primaryKeys[$item::class])) {
-                        $primaryKeys[$item::class] = [];
+                    if (!isset($this->primaryKeyValues[$item::class])) {
+                        $this->primaryKeyValues[$item::class] = [];
                     }
 
                     if (!is_null($pkv = $this->getPrimaryKeyValue($item))) {
-                        $primaryKeys[$item::class][$key] = $pkv;
+                        $this->primaryKeyValues[$item::class][$key] = $pkv;
                     }
                 }
             }
-
-            return $this->primaryKeyValues = $primaryKeys;
-        } else {
-            return $this->primaryKeyValues;
         }
+        return $this->primaryKeyValues;
     }
 
     /**
@@ -84,7 +80,7 @@ trait PrimaryKeysTrait
      */
     public function isPrimaryKeyPresent(int|string $primaryKey, ?string $class = ""): bool
     {
-        return key_exists($class, $this->getPrimaryKeyValues()) &&
+        return key_exists((string) $class, $this->getPrimaryKeyValues()) &&
             in_array($primaryKey, $this->getPrimaryKeyValues()[$class]);
     }
 
@@ -95,10 +91,10 @@ trait PrimaryKeysTrait
      */
     public function getItemByPrimaryKey(int|string $primaryKey, ?string $class = ""): mixed
     {
-        if (key_exists($class, $this->getPrimaryKeyValues())) {
+        if (key_exists((string) $class, $this->getPrimaryKeyValues())) {
             foreach ($this->getPrimaryKeyValues()[$class] as $key => $primary) {
                 if ($primaryKey === $primary) {
-                    return $this[$key];
+                    return $this[$key] ? $this[$key] : null;
                 }
             }
         }
@@ -113,39 +109,20 @@ trait PrimaryKeysTrait
      */
     public function getCollectionKey(mixed $target): int|string|null
     {
+        $pkv = $this->getPrimaryKeyValue($target);
         if ($pkvs = $this->getPrimaryKeyValues()) {
-            $pkv = $this->getPrimaryKeyValue($target);
             foreach ($pkvs[$target::class] as $key => $value) {
                 if ($value === $pkv) {
                     return $key;
                 }
             }
-        }
-
-        $primaryKey = $this->declaredPrimaryKey();
-        if (method_exists($target, $primaryKey)) {
-            $targetKey = $target->$primaryKey();
+        } else {
             foreach ($this as $key => $item) {
-                if ($targetKey === $item->$primaryKey()) {
-                    return $key;
-                }
-            }
-        } elseif (method_exists($target, "get" . ucfirst($primaryKey))) {
-            $keyGet = "get" . ucfirst($primaryKey);
-            $targetKey = $target->$keyGet();
-            foreach ($this as $key => $item) {
-                if ($targetKey === $item->$keyGet()) {
-                    return $key;
-                }
-            }
-        } elseif (property_exists($target, $primaryKey)) {
-            foreach ($this as $key => $item) {
-                if ($target->$primaryKey === $item->$primaryKey) {
+                if ($pkv === $this->getPrimaryKeyValue($item)) {
                     return $key;
                 }
             }
         }
-
         return null;
     }
 }

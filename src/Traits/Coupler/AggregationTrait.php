@@ -7,10 +7,12 @@ use YellowCable\Collection\Aggregation;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\{DoesNotExistException,
     DuplicateItemException,
+    EmptyException,
     FailedInheritanceException,
     NotImplementedException,
     ValidationException};
 use YellowCable\Collection\Interfaces\AggregationInterface;
+use YellowCable\Collection\Traits\AggregationRegistry;
 
 /**
  * AggregationTrait is a trait that can be used if the class has a possibility of being aggregated.
@@ -34,6 +36,8 @@ trait AggregationTrait
      * @return AggregationInterface
      * @throws FailedInheritanceException
      * @throws DoesNotExistException
+     * @throws NotImplementedException
+     * @throws EmptyException
      */
     public function aggregate(): AggregationInterface
     {
@@ -53,6 +57,6 @@ trait AggregationTrait
      */
     public function getAggregation(): AggregationInterface
     {
-        return Aggregation::get($this->getIdentifier());
+        return AggregationRegistry::get($this->getIdentifier());
     }
 }

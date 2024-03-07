@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Calculation\Counter;
+namespace YellowCable\Collection\Traits\Addons\Calculation\Counter;
 
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 

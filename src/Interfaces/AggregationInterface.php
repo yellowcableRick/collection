@@ -4,8 +4,7 @@ namespace YellowCable\Collection\Interfaces;
 
 /**
  * @template Item
- * @template Collection
- * @extends CollectionInterface<Collection>
+ * @extends CollectionInterface<Item>
  */
 
 interface AggregationInterface extends CollectionInterface
@@ -19,7 +18,7 @@ interface AggregationInterface extends CollectionInterface
      *
      * @param CollectionInterface<Item>    $collection
      * @param bool                      $preventDuplicates
-     * @return AggregationInterface<Item, Collection>
+     * @return AggregationInterface<Item>
      */
     public function addCollection(
         CollectionInterface $collection,

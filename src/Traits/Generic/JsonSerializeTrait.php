@@ -6,6 +6,7 @@ trait JsonSerializeTrait
 {
     /**
      * @inheritDoc
+     * @return array<mixed>
      */
     public function jsonSerialize(): array
     {

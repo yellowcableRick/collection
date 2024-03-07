@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Validation;
+namespace YellowCable\Collection\Traits\Addons\Validation;
 
 /**
  * HashTrait enables the using class to generate a xxh3 hash of itself,

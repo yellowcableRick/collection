@@ -1,15 +1,20 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Locators;
+namespace YellowCable\Collection\Traits\Addons\Locators;
 
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 
+/**
+ * @template Item
+ */
 trait FirstIdentifierMatchTrait
 {
-    abstract public function first(): mixed;
+    /** @use FirstTrait<Item> */
+    use FirstTrait;
 
     /**
+     * @return Item|null
      * @throws NotImplementedException
      * @throws EmptyException
      */

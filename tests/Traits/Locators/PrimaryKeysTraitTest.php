@@ -5,8 +5,8 @@ namespace YellowCable\Collection\Tests\Traits\Locators;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Test;
+use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
 use YellowCable\Collection\Traits\CollectionTrait;
-use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
 
 class PrimaryKeysTraitTest extends Test
 {
@@ -14,7 +14,9 @@ class PrimaryKeysTraitTest extends Test
     {
         $collection = new class () implements CollectionInterface
         {
+            /** @use CollectionTrait<Item> */
             use CollectionTrait;
+            /** @use PrimaryKeysTrait<Item> */
             use PrimaryKeysTrait;
 
             public function getClass(): string
@@ -35,6 +37,6 @@ class PrimaryKeysTraitTest extends Test
         $this->assertEquals(1, $collection->getCollectionKey(new Item("2", 2, 2)));
         $this->assertEquals(new Item("1", 1, 1), $collection->getItemByPrimaryKey("1", Item::class));
         $collection[] = new Item("4", 1, 2);
-        $this->assertEquals(3, count($collection->getPrimaryKeyValues()[Item::class]));
+        $this->assertEquals(3, count((array) $collection->getPrimaryKeyValues()[Item::class]));
     }
 }

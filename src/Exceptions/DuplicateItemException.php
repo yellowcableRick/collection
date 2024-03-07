@@ -10,7 +10,7 @@ use Throwable;
  */
 class DuplicateItemException extends Exception
 {
-    public function __construct(?string $message = "", ?int $code = 0, ?Throwable $previous = null)
+    public function __construct(?string $message = "", int $code = 0, ?Throwable $previous = null)
     {
         parent::__construct("Duplicates found in collection. " . $message, $code, $previous);
     }

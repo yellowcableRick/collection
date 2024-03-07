@@ -1,7 +1,10 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Locators;
+namespace YellowCable\Collection\Traits\Addons\Locators;
 
+/**
+ * @template Item
+ */
 trait IterativeGetTrait
 {
     /**
@@ -25,7 +28,7 @@ trait IterativeGetTrait
      * Get the first item from the collection where the item meets the condition.
      *
      * @param callable $condition
-     * @return mixed
+     * @return Item|null
      */
     public function getItem(callable $condition): mixed
     {

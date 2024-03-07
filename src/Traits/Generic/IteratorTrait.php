@@ -2,6 +2,8 @@
 
 namespace YellowCable\Collection\Traits\Generic;
 
+use YellowCable\Collection\Exceptions\DoesNotExistException;
+
 /**
  * @template Item
  */
@@ -13,10 +15,11 @@ trait IteratorTrait
     /**
      * @inheritDoc
      * @return Item
+     * @throws DoesNotExistException
      */
     public function current(): mixed
     {
-        return !$this->offsetExists($this->index) ?: $this->collection[$this->index];
+        return $this->offsetExists($this->index) ? $this->collection[$this->index] : throw new DoesNotExistException();
     }
 
     /**

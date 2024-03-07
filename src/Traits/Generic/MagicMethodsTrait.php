@@ -19,8 +19,8 @@ trait MagicMethodsTrait
      * the item(s).
      *
      * @param string $name
-     * @param array $arguments
-     * @return array
+     * @param array<mixed> $arguments
+     * @return array<mixed>
      * @throws NotImplementedException
      */
     public function __call(string $name, array $arguments = []): array
@@ -29,7 +29,7 @@ trait MagicMethodsTrait
         foreach ($this as $item) {
             $identifier = method_exists($item, "getIdentifier") ? $item->getIdentifier() : null;
             !method_exists($item, $name) ?:
-                $output[$identifier] = call_user_func_array([$item, $name], $arguments);
+                $output[$identifier] = $item->$name(...$arguments);
         }
 
         return $output;
@@ -38,7 +38,7 @@ trait MagicMethodsTrait
     /**
      * @throws DoesNotExistException
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         throw new DoesNotExistException("Property \"$name\" does not exist on this collection.");
     }
@@ -46,7 +46,7 @@ trait MagicMethodsTrait
     /**
      * @throws DoesNotExistException
      */
-    public function __set(string $name, $value): void
+    public function __set(string $name, mixed $value): void
     {
         throw new DoesNotExistException("Property does not exist on this collection.");
     }
@@ -61,7 +61,7 @@ trait MagicMethodsTrait
     public function __toString(): string
     {
         if (method_exists($this, "jsonSerialize")) {
-            return json_encode($this);
+            return (string) json_encode($this);
         } else {
             return serialize($this);
         }

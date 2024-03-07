@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Calculation;
+namespace YellowCable\Collection\Traits\Addons\Calculation;
 
 /**
  * MaxTrait is a trait which can be used on any Iterable class.

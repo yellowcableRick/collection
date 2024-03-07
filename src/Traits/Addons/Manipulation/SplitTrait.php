@@ -1,13 +1,12 @@
 <?php
 
-namespace YellowCable\Collection\Traits\Manipulation;
+namespace YellowCable\Collection\Traits\Addons\Manipulation;
 
-use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\SplitException;
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Interfaces\Locators\PrimaryKeysInterface;
+use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
 use YellowCable\Collection\Traits\CollectionTrait;
-use YellowCable\Collection\Traits\Locators\PrimaryKeysTrait;
 
 /**
  * @template Item
@@ -22,6 +21,7 @@ trait SplitTrait
      */
     public function split(callable $condition): CollectionInterface&PrimaryKeysInterface
     {
+        /** @var array<CollectionInterface> $subs */
         $subs = [];
         foreach ($this as $item) {
             $unique = $condition($item);
@@ -38,21 +38,16 @@ trait SplitTrait
         }
 
         /** @var CollectionInterface&PrimaryKeysInterface $class */
-        /**
-         * @template Item
-         * @implements CollectionInterface<Item>
-         * @implements PrimaryKeysInterface<Item>
-         */
         $class = new class ($this->getIdentifier(), $subs) implements CollectionInterface, PrimaryKeysInterface {
             /** @use CollectionTrait<Item> */
             use CollectionTrait;
             /** @use PrimaryKeysTrait<Item> */
             use PrimaryKeysTrait;
 
-            public function __construct(string $identifier, array $subs)
+            public function __construct(string $identifier, mixed $subs)
             {
                 $this->setIdentifier($identifier);
-                $this->setCollection($subs);
+                $this->setCollection($subs, false);
             }
 
             public function getClass(): string
