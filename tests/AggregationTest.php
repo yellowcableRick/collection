@@ -3,15 +3,14 @@
 namespace YellowCable\Collection\Tests;
 
 use Exception;
-use YellowCable\Collection\Aggregation;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\Item\ItemAggregation;
-use YellowCable\Collection\Tests\Example\Item\ItemCollection;
+use YellowCable\Collection\Tests\Example\Items;
+use YellowCable\Collection\Tests\Example\ItemsAggregation;
 use YellowCable\Collection\Traits\AggregationRegistry;
 
 class AggregationTest extends Test
@@ -24,7 +23,7 @@ class AggregationTest extends Test
      */
     public function testStatics(): void
     {
-        $col = new ItemCollection("test", [new Item("test", 1, 1)]);
+        $col = new Items("test", [new Item("test", 1, 1)]);
         AggregationRegistry::aggregateCollection($col, false);
         $this->assertEquals(
             AggregationRegistry::get("test")[0],
@@ -43,27 +42,32 @@ class AggregationTest extends Test
      * @throws DuplicateItemException
      * @throws ValidationException
      * @throws NotImplementedException
+     * @throws EmptyException
      */
-    public function testAddCollection()
+    public function testAddCollection(): void
     {
-        $agg = new ItemAggregation("bliep");
-        $agg->addCollection(new ItemCollection("test", [new Item("item", 1, 1)]), false);
+        $agg = new ItemsAggregation("bliep");
+        $agg->addCollection(new Items("test", [new Item("item", 1, 1)]), false);
         $this->assertEquals(
             $agg->offsetGet(0),
-            (new ItemCollection("test", [new Item("item", 1, 1)]))->getEncapsulation()
+            (new Items("test", [new Item("item", 1, 1)]))->getEncapsulation()
         );
     }
 
     /**
      * @throws DuplicateItemException
      * @throws NotImplementedException
+     * @throws EmptyException
+     * @throws ValidationException
+     * @throws DoesNotExistException
      */
-    public function testDuplicationVerification()
+    public function testDuplicationVerification(): void
     {
-        $agg = new ItemAggregation("blaat");
-        $agg->addCollection(new ItemCollection("test", [new Item("item", 1, 1)]), false);
-        $agg2 = new ItemAggregation("blaat");
-        $this->expectException(ValidationException::class);
-        $agg2->addCollection(new ItemCollection("test", [new Item("item", 1, 1)]));
+        $agg = new ItemsAggregation("blaat");
+        $col = new Items("test", [new Item("item", 1, 1)]);
+        $agg->addCollection($col);
+        $agg2 = AggregationRegistry::get("blaat");
+        $this->expectException(DuplicateItemException::class);
+        $agg2->addCollection($col);
     }
 }

@@ -16,12 +16,12 @@ interface AggregationInterface extends CollectionInterface
      *  if the Collections use the PrimaryKeyTrait, which defines the unique property
      *  between the collected Items.
      *
-     * @param CollectionInterface<Item>    $collection
+     * @param Item $collection
      * @param bool                      $preventDuplicates
      * @return AggregationInterface<Item>
      */
     public function addCollection(
-        CollectionInterface $collection,
+        mixed $collection,
         bool $preventDuplicates = true
     ): AggregationInterface;
 

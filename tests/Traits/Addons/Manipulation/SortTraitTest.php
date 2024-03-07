@@ -1,17 +1,20 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Manipulation;
+namespace YellowCable\Collection\Tests\Traits\Addons\Manipulation;
 
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
-use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Test;
+use YellowCable\Collection\Traits\Addons\Manipulation\SortTrait;
 
 class SortTraitTest extends Test
 {
     public function testUsort(): void
     {
-        $collection = new FullTraitedItemCollection();
+        $collection = new class extends Items {
+            use SortTrait;
+        };
         foreach (
             [
                 new Item("10", 1, 1),
@@ -43,7 +46,9 @@ class SortTraitTest extends Test
      */
     public function testUasort(): void
     {
-        $collection = new FullTraitedItemCollection();
+        $collection = new class extends Items {
+            use SortTrait;
+        };
         foreach (
             [
                 new Item("10", 1, 1),

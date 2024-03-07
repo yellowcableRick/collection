@@ -3,13 +3,13 @@
 namespace YellowCable\Collection\Tests;
 
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\Item\ItemCollection;
+use YellowCable\Collection\Tests\Example\Items;
 
 class CollectionTest extends Test
 {
     public function testSetCollection(): void
     {
-        $collection = new ItemCollection("test", [
+        $collection = new Items("test", [
             new Item("1", 1, 1),
             new Item("1", 1, 1),
             new Item("1", 1, 1),
@@ -20,7 +20,7 @@ class CollectionTest extends Test
 
     public function testEncapsulation(): void
     {
-        $collection = new ItemCollection("test", [
+        $collection = new Items("test", [
             new Item("1", 1, 1),
             new Item("1", 1, 1),
             new Item("1", 1, 1),
@@ -35,7 +35,7 @@ class CollectionTest extends Test
 
     public function testIdentifier(): void
     {
-        $collection = new ItemCollection("", [
+        $collection = new Items("", [
             new Item("1", 1, 1),
             new Item("2", 1, 1),
             new Item("3", 1, 1),

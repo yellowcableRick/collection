@@ -1,9 +1,10 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Calculation;
+namespace YellowCable\Collection\Tests\Traits\Addons\Calculation;
 
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Test;
 use YellowCable\Collection\Traits\Addons\Calculation\Counter\CounterTrait;
 
@@ -11,14 +12,9 @@ class CounterTraitTest extends Test
 {
     public function test(): void
     {
-        $subject = new class () extends Collection
+        $subject = new class () extends Items
         {
             use CounterTrait;
-
-            public function getClass(): string
-            {
-                return Item::class;
-            }
         };
 
         $subject[] = new Item("test1", 1, 1);

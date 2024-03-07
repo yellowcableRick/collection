@@ -3,29 +3,27 @@
 namespace YellowCable\Collection\Tests;
 
 use DateTime;
-use Exception;
 use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
-use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
-use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemAggregation;
-use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\PersistableItem\PersistenceService;
+use YellowCable\Collection\Tests\Example\Items;
+use YellowCable\Collection\Tests\Example\ItemsAggregation;
+use YellowCable\Collection\Tests\Example\Persistence;
 
 class SpeedTest extends Test
 {
     /**
      * @param int                                                   $start
-     * @param AggregationInterface<Item, FullTraitedItemCollection> $aggregation
+     * @param AggregationInterface<Item> $aggregation
      * @param int                                                   $amountOfItems
      * @return void
      * @throws PhpVersionNotSupportedException
      */
     private function build(int $start, AggregationInterface $aggregation, int $amountOfItems): void
     {
-        $collection = new FullTraitedItemCollection();
+        $collection = new Items();
         $collection->setIdentifier("SpeedTest$start");
         $collection->rewind();
         $collection->setDataProvider(function () use ($start, $amountOfItems) {
@@ -72,7 +70,7 @@ class SpeedTest extends Test
         $secForShortActions = ceil($amountOfItems * $amountOfCollections / $amountPerSecond / 10);
 
         $time = microtime(true);
-        $aggregation = new FullTraitedItemAggregation();
+        $aggregation = new ItemsAggregation();
         $aggregation->setIdentifier("SpeedTest");
         for ($i = 1; $i <= $amountOfCollections; $i++) {
             $this->build($i * $amountOfItems, $aggregation, $amountOfItems);
@@ -85,7 +83,7 @@ class SpeedTest extends Test
         );
         $time = microtime(true);
 
-        $aggregation::$persistenceService = new PersistenceService();
+        $aggregation::$persistenceService = new Persistence();
         $aggregation->persist();
 
         $this->assertLessThanOrEqual(
@@ -115,9 +113,9 @@ class SpeedTest extends Test
 
         // Time to retrieve from persistence and handle the aggregation.
         $time = microtime(true);
-        $secondAggregation = new FullTraitedItemAggregation();
+        $secondAggregation = new ItemsAggregation();
         $secondAggregation->setIdentifier("SpeedTest");
-        $secondAggregation::$persistenceService = new PersistenceService();
+        $secondAggregation::$persistenceService = new Persistence();
         $secondAggregation->hydrate();
 
         $this->assertLessThanOrEqual(
@@ -203,7 +201,7 @@ class SpeedTest extends Test
     public function testBigSplit(): void
     {
         $baseTime = microtime(true);
-        $collection = new FullTraitedItemCollection();
+        $collection = new Items();
         for ($i = 1; $i <= 1000000; $i++) {
             $collection[] = new Item(
                 "$i",

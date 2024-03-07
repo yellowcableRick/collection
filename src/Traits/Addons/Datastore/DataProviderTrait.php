@@ -8,12 +8,18 @@ use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Exceptions\UnequalCountException;
+use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
 
 /**
  * DataProviderTrait enables any collection
+ *
+ * @template Item
  */
 trait DataProviderTrait
 {
+    /** @use PrimaryKeysTrait<Item> */
+    use PrimaryKeysTrait;
+
     /** @var UnsignedSerializableClosure $dataProvider Method to provide the data for the collection */
     private UnsignedSerializableClosure $dataProvider;
     /** @var UnsignedSerializableClosure $updateProvider Method to provide updates for the collection */
@@ -32,16 +38,6 @@ trait DataProviderTrait
      * @return void
      */
     abstract public function offsetSet(mixed $offset, mixed $value): void;
-
-    /**
-     * @inheritDoc
-     */
-    abstract public function declaredPrimaryKey(): string;
-
-    /**
-     * @inheritDoc
-     */
-    abstract public function getCollectionKey(object $target): int|string|null;
 
     /**
      * Setter for the dataProvider property. Uses Laravel\SerializableClosure

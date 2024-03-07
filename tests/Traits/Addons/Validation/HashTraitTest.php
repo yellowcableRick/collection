@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Validation;
+namespace YellowCable\Collection\Tests\Traits\Addons\Validation;
 
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Example\Item;

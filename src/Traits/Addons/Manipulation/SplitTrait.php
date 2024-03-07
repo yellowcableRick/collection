@@ -27,7 +27,6 @@ trait SplitTrait
             $unique = $condition($item);
             if ($unique !== null) {
                 if (!isset($subs[$unique])) {
-                    /** @var self $cap */
                     $cap = $this->getEncapsulation();
                     $subs[$unique] = $cap;
                     !property_exists($subs[$unique], "fixedCount") ?: $subs[$unique]->fixedCount = 0;

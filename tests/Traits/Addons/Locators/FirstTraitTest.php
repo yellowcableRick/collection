@@ -1,11 +1,11 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Locators;
+namespace YellowCable\Collection\Tests\Traits\Addons\Locators;
 
 use PHPUnit\Framework\TestCase;
 use YellowCable\Collection\Exceptions\EmptyException;
-use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Example\Items;
 
 class FirstTraitTest extends TestCase
 {
@@ -15,7 +15,8 @@ class FirstTraitTest extends TestCase
     public function test(): void
     {
         $item = new Item("1", 1, 1);
-        $collection = new FullTraitedItemCollection("test", [$item]);
+        $collection = new Items("test");
+        $collection[] = $item;
         $collection[] = new Item("2", 2, 2);
         $collection[] = new Item("3", 3, 3);
         $collection[] = new Item("4", 4, 4);

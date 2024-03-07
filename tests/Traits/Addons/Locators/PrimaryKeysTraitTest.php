@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Locators;
+namespace YellowCable\Collection\Tests\Traits\Addons\Locators;
 
 use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Tests\Example\Item;

@@ -1,16 +1,16 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Manipulation;
+namespace YellowCable\Collection\Tests\Traits\Addons\Manipulation;
 
-use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Test;
 
 class SplitTraitTest extends Test
 {
     public function testSplit(): void
     {
-        $collection = new FullTraitedItemCollection();
+        $collection = new Items();
         foreach (
             [
                 new Item("1", 1, 1),
@@ -28,12 +28,12 @@ class SplitTraitTest extends Test
         }
         $splits = $collection->split(fn(Item $x) => (string) $x->counter);
         $this->assertEquals(3, $splits->count());
-        $this->assertEquals(4, $splits->getItemByPrimaryKey("2", FullTraitedItemCollection::class)?->count());
+        $this->assertEquals(4, $splits->getItemByPrimaryKey("2", Items::class)?->count());
     }
 
     public function testSplitNoResultInCallback(): void
     {
-        $collection = new FullTraitedItemCollection();
+        $collection = new Items();
         foreach (
             [
                 new Item("1", 1, null),
@@ -51,8 +51,8 @@ class SplitTraitTest extends Test
         }
         $splits = $collection->split(fn(Item $x) => $x->anything);
         $this->assertEquals(4, $splits->count());
-        $this->assertEquals(1, $splits->getItemByPrimaryKey("", FullTraitedItemCollection::class)?->count());
-        $this->assertEquals(5, $splits->getItemByPrimaryKey("1", FullTraitedItemCollection::class)?->count());
-        $this->assertEquals(1, $splits->getItemByPrimaryKey("2", FullTraitedItemCollection::class)?->count());
+        $this->assertEquals(1, $splits->getItemByPrimaryKey("", Items::class)?->count());
+        $this->assertEquals(5, $splits->getItemByPrimaryKey("1", Items::class)?->count());
+        $this->assertEquals(1, $splits->getItemByPrimaryKey("2", Items::class)?->count());
     }
 }

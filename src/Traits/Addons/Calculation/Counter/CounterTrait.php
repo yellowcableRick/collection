@@ -6,6 +6,7 @@ use Exception;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
+use YellowCable\Collection\Traits\Generic\CountableTrait;
 
 /**
  * CounterTrait gives the possibility to build conditional counters for
@@ -17,8 +18,6 @@ use YellowCable\Collection\Exceptions\DoesNotExistException;
  */
 trait CounterTrait
 {
-    abstract public function count(): int;
-
     /**
      * Contains the registered counters.
      *

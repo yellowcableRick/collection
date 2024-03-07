@@ -3,7 +3,7 @@
 namespace YellowCable\Collection\Tests\Traits\Generic;
 
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\Item\ItemCollection;
+use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Test;
 
 class ArrayAccessTraitTest extends Test
@@ -14,7 +14,7 @@ class ArrayAccessTraitTest extends Test
         $item2 = new Item("item2", 0, 2.00);
         $item3 = new Item("item3", 0, 3.00);
         $item4 = new Item("item4", 0, 4.00);
-        $collection = new ItemCollection();
+        $collection = new Items();
 
         $collection[1] = $item1;
         $this->assertTrue($collection[1]?->getName() === $item1->getName());

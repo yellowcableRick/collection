@@ -1,16 +1,19 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Manipulation;
+namespace YellowCable\Collection\Tests\Traits\Addons\Manipulation;
 
-use YellowCable\Collection\Tests\Example\FullTraitedItem\FullTraitedItemCollection;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Test;
+use YellowCable\Collection\Traits\Addons\Manipulation\FilterTrait;
 
 class FilterTraitTest extends Test
 {
     public function testFilter(): void
     {
-        $collection = new FullTraitedItemCollection();
+        $collection = new class extends Items {
+            use FilterTrait;
+        };
         foreach (
             [
             new Item("1", 1, 1),

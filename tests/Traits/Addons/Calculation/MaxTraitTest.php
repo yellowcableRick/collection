@@ -1,9 +1,10 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Calculation;
+namespace YellowCable\Collection\Tests\Traits\Addons\Calculation;
 
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Tests\Example\Item;
+use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Test;
 use YellowCable\Collection\Traits\Addons\Calculation\MaxTrait;
 
@@ -11,17 +12,9 @@ class MaxTraitTest extends Test
 {
     public function testMax(): void
     {
-        $collection = new class () extends Collection
+        $collection = new class () extends Items
         {
             use MaxTrait;
-
-            /**
-             * @inheritDoc
-             */
-            public function getClass(): string
-            {
-                return Item::class;
-            }
         };
 
         for ($i = 0; $i <= 100; $i++) {

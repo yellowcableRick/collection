@@ -1,6 +1,6 @@
 <?php
 
-namespace YellowCable\Collection\Tests\Traits\Datastore;
+namespace YellowCable\Collection\Tests\Traits\Addons\Datastore;
 
 use Exception;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
@@ -8,18 +8,23 @@ use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\PersistableItem\PersistableCollectionAggregation;
-use YellowCable\Collection\Tests\Example\PersistableItem\PersistableItemCollection;
+use YellowCable\Collection\Tests\Example\Items;
+use YellowCable\Collection\Tests\Example\ItemsAggregation;
 use YellowCable\Collection\Tests\Test;
 
 class PersistenceTraitTest extends Test
 {
+    public function __construct(string $name)
+    {
+        parent::__construct($name);
+    }
+
     /**
      * @throws Exception
      */
     public function testPersistence(): void
     {
-        $collection = new PersistableItemCollection();
+        $collection = new Items();
         $collection->setIdentifier("test");
         $collection2 = clone $collection;
 
@@ -43,13 +48,13 @@ class PersistenceTraitTest extends Test
      */
     public function testAggregationPersistence(): void
     {
-        $aggregation = new PersistableCollectionAggregation("dreams");
-        $collection = new PersistableItemCollection();
+        $aggregation = new ItemsAggregation("dreams");
+        $collection = new Items();
         $collection[] = new Item("1", 1, 1);
         $aggregation->addCollection($collection, false);
         $aggregation->persist();
 
-        $aggregation2 = new PersistableCollectionAggregation("dreams");
+        $aggregation2 = new ItemsAggregation("dreams");
         $this->assertEquals(0, $aggregation2->count());
         $aggregation2->hydrate();
         $this->assertEquals(1, $aggregation2->count());

@@ -27,7 +27,7 @@ trait AggregationTrait
      * @throws EmptyException
      */
     public function addCollection(
-        CollectionInterface $collection,
+        mixed $collection,
         bool $preventDuplicates = true
     ): AggregationInterface {
         if ($collection->count() === 0) {

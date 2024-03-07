@@ -3,14 +3,14 @@
 namespace YellowCable\Collection\Tests\Traits\Generic;
 
 use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Tests\Example\Item\ItemCollection;
+use YellowCable\Collection\Tests\Example\Items;
 use PHPUnit\Framework\TestCase;
 
 class GeneratorTraitTest extends TestCase
 {
     public function testGenerator(): void
     {
-        $collection = new ItemCollection("", [
+        $collection = new Items("", [
             new Item("item1", 0, 1.00),
             new Item("item2", 0, 2.00),
             new Item("item3", 0, 3.00),
@@ -23,7 +23,7 @@ class GeneratorTraitTest extends TestCase
 
     public function testKeyGenerator(): void
     {
-        $collection = new ItemCollection("", [
+        $collection = new Items("", [
             new Item("item1", 0, 1.00),
             new Item("item2", 0, 2.00),
             new Item("item3", 0, 3.00),
@@ -37,7 +37,7 @@ class GeneratorTraitTest extends TestCase
 
     public function testKeyValueGenerator(): void
     {
-        $collection = new ItemCollection("", [
+        $collection = new Items("", [
             new Item("item1", 0, 1.00),
             new Item("item2", 0, 2.00),
             new Item("item3", 0, 3.00),
