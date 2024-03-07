@@ -2,7 +2,6 @@
 
 namespace YellowCable\Collection\Traits;
 
-use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
@@ -15,6 +14,9 @@ use YellowCable\Collection\Interfaces\CollectionInterface;
  */
 trait AggregationTrait
 {
+    /** @use CollectionTrait<Item> */
+    use CollectionTrait;
+
     /**
      * @inheritDoc
      * @TODO: Duplication check is rather expensive, and might be subject to refactoring

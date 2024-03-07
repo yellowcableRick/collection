@@ -16,6 +16,7 @@ use YellowCable\Collection\Traits\Generic\SeekableIteratorTrait;
  */
 trait CollectionTrait
 {
+    /** @use ArrayAccessTrait<int, Item> */
     use ArrayAccessTrait;
     use CountableTrait;
     /** @use GeneratorTrait<Item> */

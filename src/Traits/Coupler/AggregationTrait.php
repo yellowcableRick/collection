@@ -42,7 +42,7 @@ trait AggregationTrait
     public function aggregate(): AggregationInterface
     {
         if ($this instanceof Collection) {
-            return Aggregation::aggregate($this);
+            return AggregationRegistry::aggregateCollection($this);
         } else {
             throw new FailedInheritanceException("Used AggregationTrait on something other than a Collection");
         }

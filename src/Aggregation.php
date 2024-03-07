@@ -4,12 +4,8 @@ namespace YellowCable\Collection;
 
 use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
-use YellowCable\Collection\Interfaces\AggregationStaticInterface;
-use YellowCable\Collection\Interfaces\CollectionInterface;
 use YellowCable\Collection\Traits\AggregationRegistry;
-use YellowCable\Collection\Traits\AggregationStaticTrait;
 use YellowCable\Collection\Traits\AggregationTrait;
-use YellowCable\Collection\Traits\CollectionTrait;
 
 /**
  * Aggregation is used to aggregate items using Collections as containers,
@@ -23,16 +19,10 @@ use YellowCable\Collection\Traits\CollectionTrait;
  * your aggregations by setting the correct identifiers in the Collections.
  *
  * @template Item
- * @implements CollectionInterface<Item>
  * @implements AggregationInterface<Item>
- * @implements AggregationStaticInterface<Item>
  */
-abstract class Aggregation implements CollectionInterface, AggregationInterface, AggregationStaticInterface
+abstract class Aggregation implements AggregationInterface
 {
-    /** @use CollectionTrait<Item> */
-    use CollectionTrait;
-    /** @use AggregationStaticTrait<Item> */
-    use AggregationStaticTrait;
     /** @use AggregationTrait<Item> */
     use AggregationTrait;
 

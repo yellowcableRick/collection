@@ -4,6 +4,10 @@ namespace YellowCable\Collection\Traits\Generic;
 
 use YellowCable\Collection\Exceptions\ValidationException;
 
+/**
+ * @template TKey
+ * @template TValue
+ */
 trait ArrayAccessTrait
 {
     abstract public function getClass(): string;

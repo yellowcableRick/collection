@@ -25,7 +25,7 @@ class AggregationTest extends Test
     public function testStatics(): void
     {
         $col = new ItemCollection("test", [new Item("test", 1, 1)]);
-        Aggregation::aggregate($col, false);
+        AggregationRegistry::aggregateCollection($col, false);
         $this->assertEquals(
             AggregationRegistry::get("test")[0],
             $col->getEncapsulation()
