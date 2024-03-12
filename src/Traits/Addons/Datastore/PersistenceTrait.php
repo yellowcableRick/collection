@@ -23,9 +23,9 @@ trait PersistenceTrait
     /**
      * Persisting Collection onto Redis.
      *
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      *
-     * @return Collection
+     * @return CollectionInterface
      * @throws Exception
      */
     public static function persistCollection(CollectionInterface $collection): CollectionInterface
@@ -47,7 +47,7 @@ trait PersistenceTrait
     /**
      * Unpersisting Collection from Redis.
      *
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      * @return void
      * @throws Exception
      */
@@ -64,7 +64,7 @@ trait PersistenceTrait
      * Get a persisted Collection based on the identifier.
      *
      * @param string $identifier
-     * @return ?Collection
+     * @return ?CollectionInterface
      * @throws Exception
      */
     public static function getPersistence(string $identifier): ?CollectionInterface
@@ -72,7 +72,7 @@ trait PersistenceTrait
         try {
             $cache = self::$persistenceService->get(self::$PERSISTENT_PREFIX . $identifier);
             if (is_string($cache)) {
-                return unserialize(gzinflate($cache));
+                return unserialize(gzinflate($cache) ?: "");
             }
         } catch (Throwable) {
             return null;
@@ -83,7 +83,7 @@ trait PersistenceTrait
     /**
      * Persist this specific Collection.
      *
-     * @return Collection
+     * @return CollectionInterface
      * @throws Exception
      */
     public function persist(): CollectionInterface

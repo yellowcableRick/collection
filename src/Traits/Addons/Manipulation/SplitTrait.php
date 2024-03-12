@@ -27,10 +27,11 @@ trait SplitTrait
             $unique = $condition($item);
             if ($unique !== null) {
                 if (!isset($subs[$unique])) {
+                    /** @var self $cap */
                     $cap = $this->getEncapsulation();
+                    $cap->setSplitIdentifier($unique);
                     $subs[$unique] = $cap;
                     !property_exists($subs[$unique], "fixedCount") ?: $subs[$unique]->fixedCount = 0;
-                    $subs[$unique]->setSplitIdentifier($unique);
                 }
                 $subs[$unique][] = $item;
             }

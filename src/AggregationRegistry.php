@@ -1,9 +1,7 @@
 <?php
 
-namespace YellowCable\Collection\Traits;
+namespace YellowCable\Collection;
 
-use YellowCable\Collection\Aggregation;
-use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
@@ -14,6 +12,7 @@ use YellowCable\Collection\Interfaces\Locators\FirstIdentifierMatchInterface;
 use YellowCable\Collection\Interfaces\Locators\IterativeGetInterface;
 use YellowCable\Collection\Traits\Addons\Locators\FirstIdentifierMatchTrait;
 use YellowCable\Collection\Traits\Addons\Locators\IterativeGetTrait;
+use YellowCable\Collection\Traits\CollectionTrait;
 
 /**
  * @template Item
@@ -60,8 +59,7 @@ final class AggregationRegistry extends Collection implements FirstIdentifierMat
      */
     public static function get(string $identifier): AggregationInterface
     {
-        return AggregationRegistry::registry()->getFirstIdentifierMatch($identifier) ??
-            throw new DoesNotExistException();
+        return AggregationRegistry::registry()->getFirstIdentifierMatch($identifier);
     }
 
     /**
@@ -96,15 +94,15 @@ final class AggregationRegistry extends Collection implements FirstIdentifierMat
     }
 
     /**
-     * @param CollectionInterface<Item> $collection
-     * @param bool                $preventDuplicates
+     * @param Item $collection
+     * @param bool $preventDuplicates
      * @return AggregationInterface<Item>
      * @throws DoesNotExistException
      * @throws EmptyException
      * @throws NotImplementedException
      */
     public static function aggregateCollection(
-        CollectionInterface $collection,
+        mixed $collection,
         bool $preventDuplicates = true
     ): AggregationInterface {
         try {

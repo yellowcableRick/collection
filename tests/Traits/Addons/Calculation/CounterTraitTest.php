@@ -2,7 +2,9 @@
 
 namespace YellowCable\Collection\Tests\Traits\Addons\Calculation;
 
+use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
 use YellowCable\Collection\Collection;
+use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Test;
@@ -10,6 +12,10 @@ use YellowCable\Collection\Traits\Addons\Calculation\Counter\CounterTrait;
 
 class CounterTraitTest extends Test
 {
+    /**
+     * @throws ValidationException
+     * @throws PhpVersionNotSupportedException
+     */
     public function test(): void
     {
         $subject = new class () extends Items

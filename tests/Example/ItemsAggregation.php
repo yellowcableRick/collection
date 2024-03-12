@@ -10,6 +10,7 @@ use YellowCable\Collection\Traits\Addons\Locators\FirstIdentifierMatchTrait;
 use YellowCable\Collection\Traits\AggregationTrait;
 
 /**
+ * @extends Aggregation<Items>
  * @implements AggregationInterface<Items>
  * @implements FirstIdentifierMatchInterface<Items>
  */

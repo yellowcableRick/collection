@@ -4,9 +4,11 @@ namespace YellowCable\Collection\Tests;
 
 use DateTime;
 use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
+use YellowCable\Collection\Exceptions\DuplicateItemException;
+use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
-use YellowCable\Collection\Interfaces\AggregationInterface;
+use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Example\ItemsAggregation;
@@ -16,12 +18,16 @@ class SpeedTest extends Test
 {
     /**
      * @param int                                                   $start
-     * @param AggregationInterface<Item> $aggregation
+     * @param ItemsAggregation $aggregation
      * @param int                                                   $amountOfItems
      * @return void
      * @throws PhpVersionNotSupportedException
+     * @throws DuplicateItemException
+     * @throws ValidationException
+     * @throws EmptyException
+     * @throws NotImplementedException
      */
-    private function build(int $start, AggregationInterface $aggregation, int $amountOfItems): void
+    private function build(int $start, ItemsAggregation $aggregation, int $amountOfItems): void
     {
         $collection = new Items();
         $collection->setIdentifier("SpeedTest$start");
@@ -76,11 +82,7 @@ class SpeedTest extends Test
             $this->build($i * $amountOfItems, $aggregation, $amountOfItems);
         }
 
-        $this->assertLessThanOrEqual(
-            $secForLongActions,
-            max(1.0, round(microtime(true) - $time, 2)),
-            "time to create items and collections and aggregate: " . round((microtime(true) - $time), 2)
-        );
+        $this->assertLessThanOrEqual($secForLongActions, max(1.0, round(microtime(true) - $time, 2)));
         $time = microtime(true);
 
         $aggregation::$persistenceService = new Persistence();
@@ -89,27 +91,17 @@ class SpeedTest extends Test
         $this->assertLessThanOrEqual(
             $secForLongActions,
             max(1.0, round(microtime(true) - $time, 2)),
-            "time to persist: " . round(round((microtime(true) - $time), 2), 2)
         );
         $time = microtime(true);
 
         $this->assertEquals($amountOfCollections, $aggregation->count());
+        $this->assertEquals(($amountOfCollections * $amountOfItems), array_sum($aggregation->__call("count")));
         $this->assertEquals(
             ($amountOfCollections * $amountOfItems),
-            $amount = array_sum($aggregation->__call("count")),
-            "amount of items to process: $amount"
-        );
-        $this->assertEquals(
-            ($amountOfCollections * $amountOfItems),
-            $amount = array_sum($aggregation->__call("getCount", ["counter>anything"])),
-            "amount of items where counter is bigger than anything: $amount"
+            array_sum($aggregation->__call("getCount", ["counter>anything"])),
         );
 
-        $this->assertLessThanOrEqual(
-            $secForLongActions,
-            max(1.0, round(microtime(true) - $time, 2)),
-            "time to handle initial setup: " . round((microtime(true) - $time), 2)
-        );
+        $this->assertLessThanOrEqual($secForLongActions, max(1.0, round(microtime(true) - $time, 2)));
 
         // Time to retrieve from persistence and handle the aggregation.
         $time = microtime(true);
@@ -118,22 +110,14 @@ class SpeedTest extends Test
         $secondAggregation::$persistenceService = new Persistence();
         $secondAggregation->hydrate();
 
-        $this->assertLessThanOrEqual(
-            $secForShortActions,
-            max(1.0, round(microtime(true) - $time, 2)),
-            "time to rehydrate from persistence: " . round((microtime(true) - $time), 2)
-        );
+        $this->assertLessThanOrEqual($secForShortActions, max(1.0, round(microtime(true) - $time, 2)));
 
         $time = microtime(true);
         foreach ($secondAggregation as $col) {
             $col->runUpdateProvider();
         }
 
-        $this->assertLessThanOrEqual(
-            $secForLongActions,
-            max(1.0, round(microtime(true) - $time, 2)),
-            "time to run the update provider: " . round((microtime(true) - $time), 2)
-        );
+        $this->assertLessThanOrEqual($secForLongActions, max(1.0, round(microtime(true) - $time, 2)));
 
         $time = microtime(true);
         foreach ($secondAggregation as $col) {
@@ -144,37 +128,19 @@ class SpeedTest extends Test
         $this->assertLessThanOrEqual(
             $secForShortActions,
             max(1.0, round(microtime(true) - $time, 2)),
-            "time to register an extra counter and run an update for counters: " . round((microtime(true) - $time), 2)
         );
 
         $time = microtime(true);
 
-        $this->assertEquals(
-            $amountOfCollections,
-            $amount = $aggregation->count(),
-            "amount of collections retrieved: $amount"
-        );
-        $this->assertEquals(
-            ($amountOfCollections * $amountOfItems),
-            $amount = array_sum($secondAggregation->__call("count")),
-            "amount of items retrieved (not really, it's aggregated data): $amount"
-        );
+        $this->assertEquals($amountOfCollections, $aggregation->count());
+        $this->assertEquals(($amountOfCollections * $amountOfItems), array_sum($secondAggregation->__call("count")));
         $this->assertEquals(
             ceil(($amountOfCollections * $amountOfItems) / 1000),
-            $amount = round(array_sum($secondAggregation->__call("getCount", ["anything=3000000"]))),
-            "amount of items which have the value anything set to 3000000 by the update provider: $amount"
+            round(array_sum($secondAggregation->__call("getCount", ["anything=3000000"]))),
         );
-        $this->assertLessThanOrEqual(
-            $secForShortActions,
-            max(1.0, round(microtime(true) - $time, 2)),
-            "time to get the new counter: " . round((microtime(true) - $time), 2)
-        );
+        $this->assertLessThanOrEqual($secForShortActions, max(1.0, round(microtime(true) - $time, 2)));
 
-        $this->assertLessThanOrEqual(
-            $totalAllowedTime,
-            round(microtime(true) - $totalTime, 2),
-            "Total time for run: " . (microtime(true) - $totalTime)
-        );
+        $this->assertLessThanOrEqual($totalAllowedTime, round(microtime(true) - $totalTime, 2));
     }
 
     /**

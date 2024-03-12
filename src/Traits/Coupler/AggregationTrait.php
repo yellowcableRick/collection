@@ -3,16 +3,13 @@
 namespace YellowCable\Collection\Traits\Coupler;
 
 use Exception;
-use YellowCable\Collection\Aggregation;
+use YellowCable\Collection\AggregationRegistry;
 use YellowCable\Collection\Collection;
 use YellowCable\Collection\Exceptions\{DoesNotExistException,
-    DuplicateItemException,
     EmptyException,
     FailedInheritanceException,
-    NotImplementedException,
-    ValidationException};
+    NotImplementedException};
 use YellowCable\Collection\Interfaces\AggregationInterface;
-use YellowCable\Collection\Traits\AggregationRegistry;
 
 /**
  * AggregationTrait is a trait that can be used if the class has a possibility of being aggregated.

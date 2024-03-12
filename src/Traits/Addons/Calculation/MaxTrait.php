@@ -16,7 +16,7 @@ trait MaxTrait
      * collects from either the property or method assigned to $s. Based on the values
      * found it will either return an int or a float.
      *
-     * @param string $s Either method name or property name of the items in this object.
+     * @param string $z Either method name or property name of the items in this object.
      * @return int|float
      */
     public function getMax(string $z): int|float

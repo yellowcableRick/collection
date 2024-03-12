@@ -3,10 +3,11 @@
 namespace YellowCable\Collection\Tests;
 
 use PHPUnit\Framework\TestCase;
-use YellowCable\Collection\Aggregation;
-use YellowCable\Collection\Tests\Example\Item;
-use YellowCable\Collection\Traits\AggregationRegistry;
+use YellowCable\Collection\AggregationRegistry;
 
+/**
+ * @suppressWarnings(PHPMD.NumberOfChildren)
+ */
 abstract class Test extends TestCase
 {
     public function __construct(string $name)

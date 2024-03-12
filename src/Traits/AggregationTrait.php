@@ -2,12 +2,12 @@
 
 namespace YellowCable\Collection\Traits;
 
+use YellowCable\Collection\AggregationRegistry;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
 use YellowCable\Collection\Exceptions\EmptyException;
 use YellowCable\Collection\Exceptions\NotImplementedException;
 use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
-use YellowCable\Collection\Interfaces\CollectionInterface;
 
 /**
  * @template Item

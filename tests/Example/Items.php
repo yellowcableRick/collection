@@ -11,6 +11,7 @@ use YellowCable\Collection\Traits\Addons\Datastore\PersistenceTrait;
 use YellowCable\Collection\Traits\Addons\Locators\FirstIdentifierMatchTrait;
 use YellowCable\Collection\Traits\Addons\Locators\IterativeGetTrait;
 use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
+use YellowCable\Collection\Traits\Addons\Manipulation\SortTrait;
 use YellowCable\Collection\Traits\Addons\Manipulation\SplitTrait;
 use YellowCable\Collection\Traits\CollectionTrait;
 
@@ -36,6 +37,7 @@ class Items implements CollectionInterface, FirstIdentifierMatchInterface, Itera
     use DataProviderTrait;
     /** @use CounterTrait */
     use CounterTrait;
+    use SortTrait;
 
     /**
      * @param string        $identifier

@@ -56,6 +56,10 @@ trait PrimaryKeysTrait
     {
         if (!$this->primaryKeyValues || $this->count() !== array_sum(array_map("count", $this->primaryKeyValues))) {
             $this->primaryKeyValues = [];
+            /**
+             * @var int $key
+             * @var Item $item
+             */
             foreach ($this as $key => $item) {
                 if (is_object($item)) {
                     if (!isset($this->primaryKeyValues[$item::class])) {
@@ -105,9 +109,9 @@ trait PrimaryKeysTrait
      * Check what the key of the collection is for a certain item. Returns null if the object isn't found.
      *
      * @param Item $target
-     * @return int|string|null
+     * @return int|null
      */
-    public function getCollectionKey(mixed $target): int|string|null
+    public function getCollectionKey(mixed $target): int|null
     {
         $pkv = $this->getPrimaryKeyValue($target);
         if ($pkvs = $this->getPrimaryKeyValues()) {

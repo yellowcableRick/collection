@@ -2,12 +2,14 @@
 
 namespace YellowCable\Collection\Traits\Addons\Datastore;
 
+use Closure;
 use DateTime;
 use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 use YellowCable\Collection\Exceptions\FailedInheritanceException;
 use YellowCable\Collection\Exceptions\UnequalCountException;
+use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Traits\Addons\Locators\PrimaryKeysTrait;
 
 /**
@@ -43,11 +45,11 @@ trait DataProviderTrait
      * Setter for the dataProvider property. Uses Laravel\SerializableClosure
      * to ensure the serialization of the property.
      *
-     * @param callable $dataProvider
+     * @param Closure $dataProvider
      *
      * @return $this
      */
-    public function setDataProvider(callable $dataProvider): static
+    public function setDataProvider(Closure $dataProvider): static
     {
         $this->dataProvider = SerializableClosure::unsigned($dataProvider);
         return $this;
@@ -64,7 +66,7 @@ trait DataProviderTrait
      *
      * @param mixed ...$args
      *
-     * @return DataProviderTrait
+     * @return static
      * @throws PhpVersionNotSupportedException
      */
     public function runDataProvider(mixed ...$args): static
@@ -78,11 +80,11 @@ trait DataProviderTrait
      * Setter for the updateProvider property. Uses Laravel\SerializableClosure
      * to ensure the serialization of the property.
      *
-     * @param callable $updateProvider
+     * @param Closure $updateProvider
      *
      * @return $this
      */
-    public function setUpdateProvider(callable $updateProvider): static
+    public function setUpdateProvider(Closure $updateProvider): static
     {
         $this->updateProvider = SerializableClosure::unsigned($updateProvider);
         return $this;
@@ -102,9 +104,9 @@ trait DataProviderTrait
      *
      * @param mixed ...$args
      *
-     * @return DataProviderTrait
-     * @throws FailedInheritanceException
+     * @return static
      * @throws PhpVersionNotSupportedException
+     * @throws ValidationException
      */
     public function runUpdateProvider(mixed ...$args): static
     {
@@ -130,11 +132,11 @@ trait DataProviderTrait
      * Setter for the countProvider property. Uses Laravel\SerializableClosure
      * to ensure the serialization of the property.
      *
-     * @param callable $countProvider
+     * @param Closure $countProvider
      *
      * @return $this
      */
-    public function setCountProvider(callable $countProvider): static
+    public function setCountProvider(Closure $countProvider): static
     {
         $this->countProvider = SerializableClosure::unsigned($countProvider);
         return $this;

@@ -2,11 +2,13 @@
 
 namespace YellowCable\Collection\Traits\Addons\Calculation\Counter;
 
+use Closure;
 use Exception;
+use Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
 use Laravel\SerializableClosure\SerializableClosure;
 use Laravel\SerializableClosure\UnsignedSerializableClosure;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
-use YellowCable\Collection\Traits\Generic\CountableTrait;
+use YellowCable\Collection\Exceptions\ValidationException;
 
 /**
  * CounterTrait gives the possibility to build conditional counters for
@@ -25,12 +27,12 @@ trait CounterTrait
      */
     private Counters $counters;
 
-    private function getCounters(): object
+    private function getCounters(): Counters
     {
         return $this->counters ?? $this->counters = new Counters();
     }
 
-    private function createCounter(string $name, UnsignedSerializableClosure $closure): object
+    private function createCounter(string $name, UnsignedSerializableClosure $closure): Counter
     {
         return new Counter($name, $closure);
     }
@@ -38,12 +40,14 @@ trait CounterTrait
     /**
      * Register a counter.
      *
-     * @param string $name The name which you want to use to get the result later.
+     * @param string   $name The name which you want to use to get the result later.
      * @param callable $condition The boolean resulting condition which on true ups the counter with 1.
      * @return $this
+     * @throws ValidationException
      */
     public function registerCounter(string $name, callable $condition): static
     {
+        /** @var Closure $condition */
         $counter = $this->createCounter($name, SerializableClosure::unsigned($condition));
         $this->getCounters()->offsetSet(null, $counter);
         return $this;
@@ -53,6 +57,7 @@ trait CounterTrait
      * Execute all registered counters. Will zero out all counters before running.
      *
      * @return static
+     * @throws PhpVersionNotSupportedException
      */
     public function executeCount(): static
     {
@@ -93,8 +98,7 @@ trait CounterTrait
      */
     public function getCount(string $name): int
     {
-        return $this->getCounters()->isPrimaryKeyPresent($name, Counter::class) ?
-            (int) $this->getCounters()->getItem(fn($x) => $x->name === $name)->result :
+        return $this->getCounters()->getItemByPrimaryKey($name, Counter::class)?->result ??
             throw new DoesNotExistException("Counter with name $name does not exist.");
     }
 

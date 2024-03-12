@@ -3,6 +3,7 @@
 namespace YellowCable\Collection\Tests;
 
 use Exception;
+use YellowCable\Collection\AggregationRegistry;
 use YellowCable\Collection\Exceptions\DoesNotExistException;
 use YellowCable\Collection\Exceptions\DuplicateItemException;
 use YellowCable\Collection\Exceptions\EmptyException;
@@ -11,7 +12,6 @@ use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Tests\Example\Item;
 use YellowCable\Collection\Tests\Example\Items;
 use YellowCable\Collection\Tests\Example\ItemsAggregation;
-use YellowCable\Collection\Traits\AggregationRegistry;
 
 class AggregationTest extends Test
 {

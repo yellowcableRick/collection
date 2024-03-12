@@ -10,7 +10,7 @@ use Generator;
 trait GeneratorTrait
 {
     /**
-     * @return Generator<Item>
+     * @return Generator<int, Item>
      */
     public function generator(): Generator
     {

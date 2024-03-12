@@ -12,9 +12,7 @@ class SortTraitTest extends Test
 {
     public function testUsort(): void
     {
-        $collection = new class extends Items {
-            use SortTrait;
-        };
+        $collection = new Items();
         foreach (
             [
                 new Item("10", 1, 1),
@@ -46,9 +44,7 @@ class SortTraitTest extends Test
      */
     public function testUasort(): void
     {
-        $collection = new class extends Items {
-            use SortTrait;
-        };
+        $collection = new Items();
         foreach (
             [
                 new Item("10", 1, 1),
@@ -68,6 +64,7 @@ class SortTraitTest extends Test
         $this->assertEquals("46", $collection[3]?->getName());
         $this->assertEquals("10", $collection[0]?->getName());
 
+        /** @var Item $item */
         foreach ($collection->generator() as $item) {
             $this->assertEquals("1", $item->getName());
             break;

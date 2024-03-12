@@ -4,7 +4,6 @@ namespace YellowCable\Collection;
 
 use YellowCable\Collection\Exceptions\ValidationException;
 use YellowCable\Collection\Interfaces\AggregationInterface;
-use YellowCable\Collection\Traits\AggregationRegistry;
 use YellowCable\Collection\Traits\AggregationTrait;
 
 /**
